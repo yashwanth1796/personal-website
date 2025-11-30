@@ -5,6 +5,8 @@ import Link from "next/link";
 import NotionRenderer from "./NotionRenderer";
 import ShareButtons from "./ShareButtons";
 
+const siteUrl = "https://yashwanth-vandanapu.dev";
+
 interface BlogPostPageProps {
   params: Promise<{ slug: string }>;
 }
@@ -22,14 +24,26 @@ export async function generateMetadata({
   }
 
   return {
-    title: `${post.title} | Yashwanth Kumar Vandanapu`,
+    title: post.title,
     description: post.description,
+    keywords: post.tags,
+    authors: [{ name: "Yashwanth Kumar Vandanapu", url: siteUrl }],
     openGraph: {
       title: post.title,
       description: post.description,
       type: "article",
       publishedTime: post.date,
+      authors: ["Yashwanth Kumar Vandanapu"],
       tags: post.tags,
+      url: `${siteUrl}/blog/${slug}`,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.description,
+    },
+    alternates: {
+      canonical: `${siteUrl}/blog/${slug}`,
     },
   };
 }
@@ -58,8 +72,44 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     day: "numeric",
   });
 
+  // JSON-LD for Article
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description,
+    datePublished: post.date,
+    dateModified: post.date,
+    author: {
+      "@type": "Person",
+      name: "Yashwanth Kumar Vandanapu",
+      url: siteUrl,
+      jobTitle: "Senior Software Engineer",
+    },
+    publisher: {
+      "@type": "Person",
+      name: "Yashwanth Kumar Vandanapu",
+      url: siteUrl,
+    },
+    url: `${siteUrl}/blog/${slug}`,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${siteUrl}/blog/${slug}`,
+    },
+    keywords: post.tags.join(", "),
+    articleSection: "Technology",
+    inLanguage: "en-US",
+    wordCount: readingTime * 200,
+    timeRequired: `PT${readingTime}M`,
+  };
+
   return (
-    <main className="min-h-screen bg-midnight">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <main className="min-h-screen bg-midnight">
       {/* Hero Section */}
       <div className="relative pt-24 pb-16 overflow-hidden">
         {/* Background gradient */}
@@ -282,5 +332,6 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
         </div>
       </div>
     </main>
+    </>
   );
 }
