@@ -33,18 +33,16 @@ function RichText({ richText }: { richText: RichTextItem[] }) {
         const strikethrough = annotations?.strikethrough;
         const underline = annotations?.underline;
         const code = annotations?.code;
-        const color = annotations?.color;
 
         let className = "";
-        if (bold) className += "font-bold ";
+        if (bold) className += "font-semibold text-text-primary ";
         if (italic) className += "italic ";
         if (strikethrough) className += "line-through ";
         if (underline) className += "underline ";
-        if (code) className += "px-1.5 py-0.5 bg-slate-dark rounded font-mono text-accent text-sm ";
-        if (color && color !== "default") className += `text-${color} `;
+        if (code) className += "px-1.5 py-0.5 bg-accent/10 text-accent rounded font-mono text-[0.9em] ";
 
         const content = (
-          <span key={index} className={className.trim()}>
+          <span key={index} className={className.trim() || undefined}>
             {plain_text}
           </span>
         );
@@ -56,7 +54,7 @@ function RichText({ richText }: { richText: RichTextItem[] }) {
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-accent hover:underline"
+              className="text-accent hover:underline underline-offset-2 decoration-accent/50"
             >
               {content}
             </a>
@@ -95,66 +93,66 @@ function Block({ block }: { block: NotionBlock }) {
       file?: { url: string };
       external?: { url: string };
     };
-    bookmark?: { url: string };
+    bookmark?: { url: string; caption?: RichTextItem[] };
     embed?: { url: string };
   };
 
   switch (b.type) {
     case "paragraph":
       if (!b.paragraph?.rich_text || b.paragraph.rich_text.length === 0) {
-        return <div className="h-4" />;
+        return <div className="h-6" />;
       }
       return (
-        <p className="mb-4 text-text-secondary leading-relaxed">
+        <p className="mb-6 text-text-secondary leading-[1.85] text-lg">
           <RichText richText={b.paragraph.rich_text} />
         </p>
       );
 
     case "heading_1":
       return (
-        <h2 className="text-3xl font-bold mt-8 mb-4 text-text-primary">
+        <h2 className="text-3xl sm:text-4xl font-bold mt-16 mb-6 text-text-primary tracking-tight">
           <RichText richText={b.heading_1?.rich_text || []} />
         </h2>
       );
 
     case "heading_2":
       return (
-        <h3 className="text-2xl font-bold mt-6 mb-3 text-text-primary">
+        <h3 className="text-2xl sm:text-3xl font-bold mt-12 mb-5 text-text-primary tracking-tight">
           <RichText richText={b.heading_2?.rich_text || []} />
         </h3>
       );
 
     case "heading_3":
       return (
-        <h4 className="text-xl font-bold mt-4 mb-2 text-text-primary">
+        <h4 className="text-xl sm:text-2xl font-bold mt-10 mb-4 text-text-primary">
           <RichText richText={b.heading_3?.rich_text || []} />
         </h4>
       );
 
     case "bulleted_list_item":
       return (
-        <li className="ml-6 mb-2 text-text-secondary list-disc">
+        <li className="ml-6 mb-3 text-text-secondary text-lg leading-[1.8] list-disc marker:text-accent">
           <RichText richText={b.bulleted_list_item?.rich_text || []} />
         </li>
       );
 
     case "numbered_list_item":
       return (
-        <li className="ml-6 mb-2 text-text-secondary list-decimal">
+        <li className="ml-6 mb-3 text-text-secondary text-lg leading-[1.8] list-decimal marker:text-accent marker:font-semibold">
           <RichText richText={b.numbered_list_item?.rich_text || []} />
         </li>
       );
 
     case "to_do":
       return (
-        <div className="flex items-start gap-2 mb-2 text-text-secondary">
+        <div className="flex items-start gap-3 mb-3 text-text-secondary">
           <input
             type="checkbox"
             checked={b.to_do?.checked}
             readOnly
-            className="mt-1.5 accent-accent"
+            className="mt-1.5 w-5 h-5 accent-accent rounded"
           />
-          <span className={b.to_do?.checked ? "line-through opacity-60" : ""}>
+          <span className={`text-lg leading-[1.8] ${b.to_do?.checked ? "line-through opacity-60" : ""}`}>
             <RichText richText={b.to_do?.rich_text || []} />
           </span>
         </div>
@@ -162,41 +160,64 @@ function Block({ block }: { block: NotionBlock }) {
 
     case "toggle":
       return (
-        <details className="mb-4 p-4 bg-slate-dark/50 rounded-xl border border-slate-medium">
-          <summary className="cursor-pointer font-medium text-text-primary">
+        <details className="mb-6 group">
+          <summary className="cursor-pointer font-semibold text-text-primary text-lg p-4 bg-slate-dark/50 rounded-xl border border-slate-medium hover:border-accent/50 transition-colors list-none flex items-center gap-2">
+            <svg 
+              className="w-5 h-5 text-accent transition-transform group-open:rotate-90" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor" 
+              strokeWidth={2}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+            </svg>
             <RichText richText={b.toggle?.rich_text || []} />
           </summary>
+          <div className="mt-2 ml-7 pl-4 border-l-2 border-accent/30">
+            {/* Toggle children would go here */}
+          </div>
         </details>
       );
 
     case "code":
       return (
-        <pre className="p-4 bg-slate-dark rounded-xl border border-slate-medium overflow-x-auto mb-4">
-          <code className="text-sm font-mono text-accent">
-            <RichText richText={b.code?.rich_text || []} />
-          </code>
+        <div className="mb-8 rounded-2xl overflow-hidden border border-slate-medium bg-[#0d1117]">
           {b.code?.language && (
-            <div className="mt-2 text-xs text-text-muted uppercase">
-              {b.code.language}
+            <div className="px-4 py-2 bg-slate-dark/80 border-b border-slate-medium flex items-center justify-between">
+              <span className="text-xs font-mono text-accent uppercase tracking-wider">
+                {b.code.language}
+              </span>
+              <div className="flex items-center gap-1.5">
+                <span className="w-3 h-3 rounded-full bg-red-500/80" />
+                <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
+                <span className="w-3 h-3 rounded-full bg-green-500/80" />
+              </div>
             </div>
           )}
-        </pre>
+          <pre className="p-6 overflow-x-auto">
+            <code className="text-sm font-mono text-gray-300 leading-relaxed">
+              {b.code?.rich_text?.map((t) => t.plain_text).join("") || ""}
+            </code>
+          </pre>
+        </div>
       );
 
     case "quote":
       return (
-        <blockquote className="border-l-4 border-accent pl-4 py-2 mb-4 italic text-text-secondary bg-accent/5 rounded-r-lg">
-          <RichText richText={b.quote?.rich_text || []} />
+        <blockquote className="my-8 pl-6 py-4 border-l-4 border-accent bg-gradient-to-r from-accent/10 to-transparent rounded-r-xl">
+          <p className="text-xl italic text-text-secondary leading-relaxed">
+            <RichText richText={b.quote?.rich_text || []} />
+          </p>
         </blockquote>
       );
 
     case "callout":
       return (
-        <div className="p-4 mb-4 bg-accent/10 border border-accent/20 rounded-xl flex gap-3">
+        <div className="my-8 p-6 bg-gradient-to-br from-accent/10 to-secondary/5 border border-accent/20 rounded-2xl flex gap-4">
           {b.callout?.icon?.type === "emoji" && (
-            <span className="text-xl">{b.callout.icon.emoji}</span>
+            <span className="text-2xl flex-shrink-0">{b.callout.icon.emoji}</span>
           )}
-          <div className="text-text-secondary">
+          <div className="text-text-secondary text-lg leading-relaxed">
             <RichText richText={b.callout?.rich_text || []} />
           </div>
         </div>
@@ -204,7 +225,15 @@ function Block({ block }: { block: NotionBlock }) {
 
     case "divider":
       return (
-        <hr className="my-8 border-0 h-px bg-gradient-to-r from-transparent via-slate-medium to-transparent" />
+        <div className="my-12 flex items-center gap-4">
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-slate-medium to-transparent" />
+          <div className="flex gap-1">
+            <span className="w-1.5 h-1.5 bg-accent/60 rounded-full" />
+            <span className="w-1.5 h-1.5 bg-accent/40 rounded-full" />
+            <span className="w-1.5 h-1.5 bg-accent/20 rounded-full" />
+          </div>
+          <div className="h-px flex-1 bg-gradient-to-r from-transparent via-slate-medium to-transparent" />
+        </div>
       );
 
     case "image": {
@@ -216,15 +245,15 @@ function Block({ block }: { block: NotionBlock }) {
       if (!imageUrl) return null;
 
       return (
-        <figure className="mb-6">
+        <figure className="my-10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={imageUrl}
             alt={caption || "Blog image"}
-            className="w-full rounded-xl border border-slate-medium"
+            className="w-full rounded-2xl border border-slate-medium shadow-xl shadow-black/20"
           />
           {caption && (
-            <figcaption className="mt-2 text-center text-sm text-text-muted">
+            <figcaption className="mt-4 text-center text-sm text-text-muted italic">
               {caption}
             </figcaption>
           )}
@@ -240,7 +269,7 @@ function Block({ block }: { block: NotionBlock }) {
       if (!videoUrl) return null;
 
       return (
-        <div className="mb-6 rounded-xl overflow-hidden border border-slate-medium">
+        <div className="my-10 rounded-2xl overflow-hidden border border-slate-medium shadow-xl shadow-black/20">
           <video src={videoUrl} controls className="w-full" />
         </div>
       );
@@ -253,18 +282,39 @@ function Block({ block }: { block: NotionBlock }) {
           href={b.bookmark.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="block p-4 mb-4 bg-slate-dark/50 rounded-xl border border-slate-medium hover:border-accent transition-colors"
+          className="my-6 block p-5 bg-slate-dark/50 rounded-xl border border-slate-medium hover:border-accent/50 hover:bg-slate-dark/80 transition-all group"
         >
-          <div className="text-accent text-sm truncate">
-            {b.bookmark.url}
+          <div className="flex items-center gap-3">
+            <svg className="w-5 h-5 text-text-muted group-hover:text-accent transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+            </svg>
+            <span className="text-accent text-sm truncate group-hover:underline">
+              {b.bookmark.url}
+            </span>
           </div>
         </a>
       );
 
     case "embed":
       if (!b.embed?.url) return null;
+      
+      // Handle YouTube embeds
+      const youtubeMatch = b.embed.url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^&\s]+)/);
+      if (youtubeMatch) {
+        return (
+          <div className="my-10 rounded-2xl overflow-hidden border border-slate-medium shadow-xl shadow-black/20 aspect-video">
+            <iframe
+              src={`https://www.youtube.com/embed/${youtubeMatch[1]}`}
+              className="w-full h-full"
+              allowFullScreen
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            />
+          </div>
+        );
+      }
+
       return (
-        <div className="mb-6 rounded-xl overflow-hidden border border-slate-medium">
+        <div className="my-10 rounded-2xl overflow-hidden border border-slate-medium">
           <iframe
             src={b.embed.url}
             className="w-full h-96"
@@ -279,6 +329,14 @@ function Block({ block }: { block: NotionBlock }) {
 }
 
 export default function NotionRenderer({ blocks }: NotionRendererProps) {
+  if (!blocks || blocks.length === 0) {
+    return (
+      <div className="text-center py-12 text-text-muted">
+        <p>Content coming soon...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="notion-content">
       {blocks.map((block) => (
