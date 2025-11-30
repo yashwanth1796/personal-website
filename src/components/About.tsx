@@ -1,5 +1,7 @@
 "use client";
 
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+
 const highlights = [
   { number: "7+", label: "Years Experience" },
   { number: "15+", label: "Projects Delivered" },
@@ -8,14 +10,28 @@ const highlights = [
 ];
 
 export default function About() {
+  const { ref: sectionRef, isVisible: sectionVisible } = useScrollAnimation({ threshold: 0.1 });
+  const { ref: contentRef, isVisible: contentVisible } = useScrollAnimation({ threshold: 0.2 });
+  const { ref: statsRef, isVisible: statsVisible } = useScrollAnimation({ threshold: 0.2 });
+
   return (
     <section id="about" className="py-24 px-6 relative">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-obsidian/50 to-transparent" />
       
-      <div className="max-w-6xl mx-auto relative z-10">
+      <div 
+        ref={sectionRef as React.RefObject<HTMLDivElement>}
+        className="max-w-6xl mx-auto relative z-10"
+      >
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left: Content */}
-          <div>
+          <div
+            ref={contentRef as React.RefObject<HTMLDivElement>}
+            className={`transition-all duration-700 ease-out ${
+              contentVisible 
+                ? "opacity-100 translate-x-0" 
+                : "opacity-0 -translate-x-12"
+            }`}
+          >
             <p className="text-accent font-mono text-sm tracking-wider mb-4 uppercase">About Me</p>
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               Building Digital <span className="text-gradient">Experiences</span> That Matter
@@ -44,7 +60,7 @@ export default function About() {
                 href="https://linkedin.com/in/Yashwanth-Vandanapu"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-3 bg-slate-dark rounded-lg border border-slate-medium hover:border-accent hover:text-accent transition-all"
+                className="p-3 bg-slate-dark rounded-lg border border-slate-medium hover:border-accent hover:text-accent transition-all icon-bounce"
                 aria-label="LinkedIn Profile"
               >
                 <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -53,7 +69,7 @@ export default function About() {
               </a>
               <a
                 href="mailto:yashwanth.vandanapu@gmail.com"
-                className="p-3 bg-slate-dark rounded-lg border border-slate-medium hover:border-accent hover:text-accent transition-all"
+                className="p-3 bg-slate-dark rounded-lg border border-slate-medium hover:border-accent hover:text-accent transition-all icon-bounce"
                 aria-label="Email"
               >
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -62,7 +78,7 @@ export default function About() {
               </a>
               <a
                 href="tel:4168205970"
-                className="p-3 bg-slate-dark rounded-lg border border-slate-medium hover:border-accent hover:text-accent transition-all"
+                className="p-3 bg-slate-dark rounded-lg border border-slate-medium hover:border-accent hover:text-accent transition-all icon-bounce"
                 aria-label="Phone"
               >
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -73,13 +89,21 @@ export default function About() {
           </div>
 
           {/* Right: Stats Cards */}
-          <div className="grid grid-cols-2 gap-4">
+          <div 
+            ref={statsRef as React.RefObject<HTMLDivElement>}
+            className="grid grid-cols-2 gap-4"
+          >
             {highlights.map((stat, index) => (
               <div
                 key={stat.label}
-                className={`p-6 bg-slate-dark/50 rounded-2xl border border-slate-medium hover:border-accent/50 transition-all group ${
+                className={`p-6 bg-slate-dark/50 rounded-2xl border border-slate-medium hover:border-accent/50 transition-all card-hover group ${
                   index === 0 ? "col-span-2 sm:col-span-1" : ""
-                }`}
+                } ${statsVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
+                style={{ 
+                  transitionDelay: statsVisible ? `${index * 100}ms` : "0ms",
+                  transitionDuration: "600ms",
+                  transitionTimingFunction: "ease-out"
+                }}
               >
                 <div className="text-4xl md:text-5xl font-bold text-gradient mb-2">
                   {stat.number}
@@ -90,12 +114,20 @@ export default function About() {
               </div>
             ))}
             {/* Tech Stack Preview */}
-            <div className="col-span-2 p-6 bg-gradient-to-br from-accent/10 to-secondary/10 rounded-2xl border border-accent/20">
+            <div 
+              className={`col-span-2 p-6 bg-gradient-to-br from-accent/10 to-secondary/10 rounded-2xl border border-accent/20 transition-all duration-600 ${
+                statsVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+              }`}
+              style={{ transitionDelay: statsVisible ? "400ms" : "0ms" }}
+            >
               <div className="flex flex-wrap gap-2">
-                {["React", "Next.js", "TypeScript", "LangChain", "OpenAI", "Node.js"].map((tech) => (
+                {["React", "Next.js", "TypeScript", "LangChain", "OpenAI", "Node.js"].map((tech, i) => (
                   <span
                     key={tech}
-                    className="px-3 py-1 bg-midnight/50 rounded-full text-sm text-text-secondary border border-slate-medium"
+                    className={`px-3 py-1 bg-midnight/50 rounded-full text-sm text-text-secondary border border-slate-medium hover:border-accent hover:text-accent transition-all duration-300 ${
+                      statsVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
+                    }`}
+                    style={{ transitionDelay: statsVisible ? `${500 + i * 50}ms` : "0ms" }}
                   >
                     {tech}
                   </span>
@@ -108,4 +140,3 @@ export default function About() {
     </section>
   );
 }
-

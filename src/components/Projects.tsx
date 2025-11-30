@@ -1,5 +1,7 @@
 "use client";
 
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+
 const projects = [
   {
     title: "AI-Powered Survey Authoring Platform",
@@ -88,6 +90,10 @@ const projects = [
 ];
 
 export default function Projects() {
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation({ threshold: 0.3 });
+  const { ref: gridRef, isVisible: gridVisible } = useScrollAnimation({ threshold: 0.1 });
+  const { ref: bannerRef, isVisible: bannerVisible } = useScrollAnimation({ threshold: 0.3 });
+
   return (
     <section id="projects" className="py-24 px-6 bg-obsidian relative overflow-hidden">
       {/* Background decoration */}
@@ -96,7 +102,12 @@ export default function Projects() {
       <div className="absolute -bottom-32 -left-32 w-96 h-96 bg-accent/5 rounded-full blur-[128px]" />
 
       <div className="max-w-6xl mx-auto relative z-10">
-        <div className="text-center mb-16">
+        <div 
+          ref={headerRef as React.RefObject<HTMLDivElement>}
+          className={`text-center mb-16 transition-all duration-700 ease-out ${
+            headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
           <p className="text-accent font-mono text-sm tracking-wider mb-4 uppercase">Featured Work</p>
           <h2 className="text-4xl md:text-5xl font-bold">
             Projects & <span className="text-gradient">Case Studies</span>
@@ -107,13 +118,20 @@ export default function Projects() {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6">
+        <div 
+          ref={gridRef as React.RefObject<HTMLDivElement>}
+          className="grid md:grid-cols-2 gap-6"
+        >
           {projects.map((project, index) => (
             <div
               key={project.title}
-              className={`group relative p-6 rounded-2xl border border-slate-medium bg-slate-dark/30 hover:border-slate-light transition-all hover:scale-[1.02] ${
+              className={`group relative p-6 rounded-2xl border border-slate-medium bg-slate-dark/30 hover:border-slate-light transition-all card-tilt ${
                 index === 0 ? "md:col-span-2" : ""
-              }`}
+              } ${gridVisible ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-8 scale-95"}`}
+              style={{ 
+                transitionDelay: gridVisible ? `${index * 100}ms` : "0ms",
+                transitionDuration: "600ms"
+              }}
             >
               {/* Gradient accent */}
               <div className={`absolute top-0 left-0 right-0 h-1 rounded-t-2xl bg-gradient-to-r ${project.gradient} opacity-60 group-hover:opacity-100 transition-opacity`} />
@@ -138,7 +156,13 @@ export default function Projects() {
                   {/* Highlights */}
                   <ul className="space-y-2 mb-4">
                     {project.highlights.map((highlight, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-text-secondary">
+                      <li 
+                        key={i} 
+                        className={`flex items-start gap-2 text-sm text-text-secondary transition-all duration-500 ${
+                          gridVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
+                        }`}
+                        style={{ transitionDelay: gridVisible ? `${index * 100 + 200 + i * 50}ms` : "0ms" }}
+                      >
                         <svg className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                           <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
                         </svg>
@@ -149,10 +173,13 @@ export default function Projects() {
 
                   {/* Tech stack */}
                   <div className="flex flex-wrap gap-2">
-                    {project.tech.map((tech) => (
+                    {project.tech.map((tech, techIndex) => (
                       <span
                         key={tech}
-                        className="px-3 py-1 bg-midnight/50 rounded-lg text-xs text-text-muted border border-slate-medium"
+                        className={`px-3 py-1 bg-midnight/50 rounded-lg text-xs text-text-muted border border-slate-medium hover:border-accent/50 hover:text-accent transition-all duration-300 ${
+                          gridVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
+                        }`}
+                        style={{ transitionDelay: gridVisible ? `${index * 100 + 400 + techIndex * 30}ms` : "0ms" }}
                       >
                         {tech}
                       </span>
@@ -165,9 +192,18 @@ export default function Projects() {
         </div>
 
         {/* AI/LLM Expertise Banner */}
-        <div className="mt-12 p-8 bg-gradient-to-br from-accent/10 via-secondary/5 to-accent/10 rounded-2xl border border-accent/20">
+        <div 
+          ref={bannerRef as React.RefObject<HTMLDivElement>}
+          className={`mt-12 p-8 bg-gradient-to-br from-accent/10 via-secondary/5 to-accent/10 rounded-2xl border border-accent/20 transition-all duration-700 ${
+            bannerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
           <div className="flex flex-col md:flex-row items-center gap-6 text-center md:text-left">
-            <div className="w-20 h-20 bg-accent/20 rounded-2xl flex items-center justify-center flex-shrink-0">
+            <div className={`w-20 h-20 bg-accent/20 rounded-2xl flex items-center justify-center flex-shrink-0 transition-all duration-500 ${
+              bannerVisible ? "scale-100 rotate-0" : "scale-0 rotate-12"
+            }`}
+              style={{ transitionDelay: bannerVisible ? "200ms" : "0ms" }}
+            >
               <svg className="w-10 h-10 text-accent" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456zM16.894 20.567L16.5 21.75l-.394-1.183a2.25 2.25 0 00-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 001.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 001.423 1.423l1.183.394-1.183.394a2.25 2.25 0 00-1.423 1.423z" />
               </svg>
@@ -187,4 +223,3 @@ export default function Projects() {
     </section>
   );
 }
-

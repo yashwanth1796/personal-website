@@ -8,6 +8,7 @@ const navItems = [
   { label: "Skills", href: "#skills" },
   { label: "Experience", href: "#experience" },
   { label: "Projects", href: "#projects" },
+  { label: "Blog", href: "/blog" },
   { label: "Contact", href: "#contact" },
 ];
 
@@ -36,7 +37,7 @@ export default function Header() {
           {/* Logo */}
           <Link
             href="/"
-            className="text-2xl font-bold tracking-tight hover:text-accent transition-colors"
+            className="text-2xl font-bold tracking-tight hover:scale-105 transition-transform"
             style={{ fontFamily: "var(--font-family-display)" }}
           >
             <span className="text-accent">Y</span>K<span className="text-secondary">V</span>
@@ -48,7 +49,7 @@ export default function Header() {
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="text-text-secondary hover:text-accent transition-colors text-sm font-medium tracking-wide uppercase"
+                  className="nav-underline text-text-secondary hover:text-accent transition-colors text-sm font-medium tracking-wide uppercase py-1"
                 >
                   {item.label}
                 </Link>
@@ -57,7 +58,7 @@ export default function Header() {
             <li>
               <a
                 href="#contact"
-                className="px-5 py-2.5 bg-accent text-midnight font-semibold rounded-lg hover:bg-accent-light transition-all hover:shadow-lg hover:shadow-accent/20"
+                className="btn-ripple px-5 py-2.5 bg-accent text-midnight font-semibold rounded-lg hover:bg-accent-light transition-all hover:shadow-lg hover:shadow-accent/20 hover:scale-105"
               >
                 Hire Me
               </a>
@@ -76,7 +77,7 @@ export default function Header() {
               viewBox="0 0 24 24"
               strokeWidth={2}
               stroke="currentColor"
-              className="w-6 h-6"
+              className={`w-6 h-6 transition-transform duration-300 ${isMobileMenuOpen ? "rotate-90" : ""}`}
             >
               {isMobileMenuOpen ? (
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -88,11 +89,23 @@ export default function Header() {
         </div>
 
         {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden mt-4 pb-4 border-t border-slate-dark pt-4">
+        <div 
+          className={`md:hidden overflow-hidden transition-all duration-300 ease-out ${
+            isMobileMenuOpen ? "max-h-96 opacity-100 mt-4" : "max-h-0 opacity-0"
+          }`}
+        >
+          <div className="pb-4 border-t border-slate-dark pt-4">
             <ul className="flex flex-col gap-4">
-              {navItems.map((item) => (
-                <li key={item.href}>
+              {navItems.map((item, index) => (
+                <li 
+                  key={item.href}
+                  className={`transition-all duration-300 ${
+                    isMobileMenuOpen 
+                      ? "opacity-100 translate-x-0" 
+                      : "opacity-0 -translate-x-4"
+                  }`}
+                  style={{ transitionDelay: isMobileMenuOpen ? `${index * 50}ms` : "0ms" }}
+                >
                   <Link
                     href={item.href}
                     onClick={() => setIsMobileMenuOpen(false)}
@@ -102,7 +115,14 @@ export default function Header() {
                   </Link>
                 </li>
               ))}
-              <li>
+              <li
+                className={`transition-all duration-300 ${
+                  isMobileMenuOpen 
+                    ? "opacity-100 translate-x-0" 
+                    : "opacity-0 -translate-x-4"
+                }`}
+                style={{ transitionDelay: isMobileMenuOpen ? `${navItems.length * 50}ms` : "0ms" }}
+              >
                 <a
                   href="#contact"
                   onClick={() => setIsMobileMenuOpen(false)}
@@ -113,9 +133,8 @@ export default function Header() {
               </li>
             </ul>
           </div>
-        )}
+        </div>
       </nav>
     </header>
   );
 }
-

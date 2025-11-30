@@ -1,5 +1,7 @@
 "use client";
 
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+
 const skillCategories = [
   {
     title: "Languages & Web",
@@ -59,6 +61,10 @@ const skillCategories = [
 ];
 
 export default function Skills() {
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation({ threshold: 0.3 });
+  const { ref: gridRef, isVisible: gridVisible } = useScrollAnimation({ threshold: 0.1 });
+  const { ref: footerRef, isVisible: footerVisible } = useScrollAnimation({ threshold: 0.3 });
+
   return (
     <section id="skills" className="py-24 px-6 bg-obsidian relative overflow-hidden">
       {/* Background decoration */}
@@ -66,24 +72,36 @@ export default function Skills() {
       <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-slate-medium to-transparent" />
       
       <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-16">
+        <div 
+          ref={headerRef as React.RefObject<HTMLDivElement>}
+          className={`text-center mb-16 transition-all duration-700 ease-out ${
+            headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
           <p className="text-accent font-mono text-sm tracking-wider mb-4 uppercase">Technical Skills</p>
           <h2 className="text-4xl md:text-5xl font-bold">
             My <span className="text-gradient">Tech Stack</span>
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {skillCategories.map((category) => (
+        <div 
+          ref={gridRef as React.RefObject<HTMLDivElement>}
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-6"
+        >
+          {skillCategories.map((category, index) => (
             <div
               key={category.title}
-              className={`p-6 rounded-2xl border transition-all hover:scale-[1.02] ${
+              className={`p-6 rounded-2xl border transition-all card-tilt ${
                 category.highlight
                   ? "bg-gradient-to-br from-accent/10 to-secondary/10 border-accent/30 hover:border-accent/50"
                   : "bg-slate-dark/50 border-slate-medium hover:border-slate-light"
-              }`}
+              } ${gridVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"}`}
+              style={{ 
+                transitionDelay: gridVisible ? `${index * 100}ms` : "0ms",
+                transitionDuration: "500ms"
+              }}
             >
-              <div className={`inline-flex p-3 rounded-xl mb-4 ${
+              <div className={`inline-flex p-3 rounded-xl mb-4 transition-transform duration-300 hover:scale-110 ${
                 category.highlight 
                   ? "bg-accent/20 text-accent" 
                   : "bg-slate-medium text-text-secondary"
@@ -92,14 +110,17 @@ export default function Skills() {
               </div>
               <h3 className="text-xl font-bold mb-4">{category.title}</h3>
               <div className="flex flex-wrap gap-2">
-                {category.skills.map((skill) => (
+                {category.skills.map((skill, skillIndex) => (
                   <span
                     key={skill}
-                    className={`px-3 py-1.5 rounded-lg text-sm ${
+                    className={`px-3 py-1.5 rounded-lg text-sm transition-all duration-300 hover:scale-105 cursor-default ${
                       category.highlight
-                        ? "bg-midnight/50 text-accent border border-accent/20"
-                        : "bg-slate-medium/50 text-text-secondary"
-                    }`}
+                        ? "bg-midnight/50 text-accent border border-accent/20 hover:border-accent/50"
+                        : "bg-slate-medium/50 text-text-secondary hover:bg-slate-medium hover:text-text-primary"
+                    } ${gridVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"}`}
+                    style={{ 
+                      transitionDelay: gridVisible ? `${index * 100 + skillIndex * 30}ms` : "0ms"
+                    }}
                   >
                     {skill}
                   </span>
@@ -110,10 +131,15 @@ export default function Skills() {
         </div>
 
         {/* Accessibility & Best Practices */}
-        <div className="mt-12 p-8 bg-slate-dark/30 rounded-2xl border border-slate-medium">
+        <div 
+          ref={footerRef as React.RefObject<HTMLDivElement>}
+          className={`mt-12 p-8 bg-slate-dark/30 rounded-2xl border border-slate-medium transition-all duration-700 ${
+            footerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
           <div className="flex flex-col md:flex-row items-center gap-6 md:gap-12">
             <div className="flex-shrink-0">
-              <div className="w-16 h-16 bg-secondary/20 rounded-2xl flex items-center justify-center text-secondary">
+              <div className="w-16 h-16 bg-secondary/20 rounded-2xl flex items-center justify-center text-secondary animate-pulse-glow">
                 <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   <path strokeLinecap="round" strokeLinejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
@@ -133,4 +159,3 @@ export default function Skills() {
     </section>
   );
 }
-

@@ -1,5 +1,7 @@
 "use client";
 
+import { useScrollAnimation } from "@/hooks/useScrollAnimation";
+
 const experiences = [
   {
     company: "SurveyMonkey",
@@ -107,85 +109,124 @@ const experiences = [
   },
 ];
 
+function ExperienceCard({ exp, index, isVisible }: { exp: typeof experiences[0]; index: number; isVisible: boolean }) {
+  return (
+    <div 
+      className={`relative pl-20 transition-all duration-700 ease-out ${
+        isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
+      }`}
+      style={{ transitionDelay: isVisible ? `${index * 150}ms` : "0ms" }}
+    >
+      {/* Timeline dot */}
+      <div className={`absolute left-6 top-1 w-5 h-5 rounded-full border-4 transition-all duration-500 ${
+        exp.current 
+          ? "bg-accent border-accent/30 animate-pulse-glow" 
+          : "bg-slate-dark border-slate-medium"
+      } ${isVisible ? "scale-100" : "scale-0"}`}
+        style={{ transitionDelay: isVisible ? `${index * 150 + 200}ms` : "0ms" }}
+      />
+
+      {/* Content card */}
+      <div className={`p-6 rounded-2xl border transition-all card-hover ${
+        exp.current
+          ? "bg-gradient-to-br from-accent/5 to-secondary/5 border-accent/30"
+          : "bg-slate-dark/50 border-slate-medium hover:border-slate-light"
+      }`}>
+        {/* Header */}
+        <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
+          <div>
+            <h3 className="text-xl font-bold flex items-center gap-2">
+              {exp.company}
+              {exp.current && (
+                <span className="px-2 py-0.5 bg-accent/20 text-accent text-xs rounded-full font-medium">
+                  Current
+                </span>
+              )}
+            </h3>
+            <p className="text-accent font-medium">{exp.role}</p>
+          </div>
+          <div className="text-right">
+            <p className="text-text-secondary text-sm font-mono">{exp.period}</p>
+            <p className="text-text-muted text-sm">{exp.location}</p>
+          </div>
+        </div>
+
+        {/* Description */}
+        <p className="text-text-secondary mb-4">{exp.description}</p>
+
+        {/* Highlights */}
+        <ul className="space-y-2 mb-4">
+          {exp.highlights.slice(0, index === 0 ? 6 : 3).map((highlight, i) => (
+            <li 
+              key={i} 
+              className={`flex items-start gap-2 text-sm text-text-secondary transition-all duration-500 ${
+                isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
+              }`}
+              style={{ transitionDelay: isVisible ? `${index * 150 + 300 + i * 50}ms` : "0ms" }}
+            >
+              <svg className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4" />
+              </svg>
+              {highlight}
+            </li>
+          ))}
+        </ul>
+
+        {/* Tech stack */}
+        <div className="flex flex-wrap gap-2">
+          {exp.tech.map((tech, techIndex) => (
+            <span
+              key={tech}
+              className={`px-2 py-1 bg-midnight/50 rounded text-xs text-text-muted border border-slate-medium hover:border-accent/50 hover:text-accent transition-all duration-300 ${
+                isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
+              }`}
+              style={{ transitionDelay: isVisible ? `${index * 150 + 500 + techIndex * 30}ms` : "0ms" }}
+            >
+              {tech}
+            </span>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Experience() {
+  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation({ threshold: 0.3 });
+  const { ref: timelineRef, isVisible: timelineVisible } = useScrollAnimation({ threshold: 0.05 });
+
   return (
     <section id="experience" className="py-24 px-6 relative">
       <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-16">
+        <div 
+          ref={headerRef as React.RefObject<HTMLDivElement>}
+          className={`text-center mb-16 transition-all duration-700 ease-out ${
+            headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
+          }`}
+        >
           <p className="text-accent font-mono text-sm tracking-wider mb-4 uppercase">Career Journey</p>
           <h2 className="text-4xl md:text-5xl font-bold">
             Work <span className="text-gradient">Experience</span>
           </h2>
         </div>
 
-        <div className="relative">
+        <div ref={timelineRef as React.RefObject<HTMLDivElement>} className="relative">
           {/* Timeline line */}
-          <div className="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-accent via-secondary to-slate-dark" />
+          <div 
+            className={`absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-accent via-secondary to-slate-dark transition-all duration-1000 ease-out origin-top ${
+              timelineVisible ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"
+            }`} 
+          />
 
           {/* Experience items */}
           <div className="space-y-12">
             {experiences.map((exp, index) => (
-              <div key={`${exp.company}-${exp.period}`} className="relative pl-20">
-                {/* Timeline dot */}
-                <div className={`absolute left-6 top-1 w-5 h-5 rounded-full border-4 ${
-                  exp.current 
-                    ? "bg-accent border-accent/30 animate-pulse-glow" 
-                    : "bg-slate-dark border-slate-medium"
-                }`} />
-
-                {/* Content card */}
-                <div className={`p-6 rounded-2xl border transition-all hover:scale-[1.01] ${
-                  exp.current
-                    ? "bg-gradient-to-br from-accent/5 to-secondary/5 border-accent/30"
-                    : "bg-slate-dark/50 border-slate-medium hover:border-slate-light"
-                }`}>
-                  {/* Header */}
-                  <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
-                    <div>
-                      <h3 className="text-xl font-bold flex items-center gap-2">
-                        {exp.company}
-                        {exp.current && (
-                          <span className="px-2 py-0.5 bg-accent/20 text-accent text-xs rounded-full font-medium">
-                            Current
-                          </span>
-                        )}
-                      </h3>
-                      <p className="text-accent font-medium">{exp.role}</p>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-text-secondary text-sm font-mono">{exp.period}</p>
-                      <p className="text-text-muted text-sm">{exp.location}</p>
-                    </div>
-                  </div>
-
-                  {/* Description */}
-                  <p className="text-text-secondary mb-4">{exp.description}</p>
-
-                  {/* Highlights */}
-                  <ul className="space-y-2 mb-4">
-                    {exp.highlights.slice(0, index === 0 ? 6 : 3).map((highlight, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-text-secondary">
-                        <svg className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4" />
-                        </svg>
-                        {highlight}
-                      </li>
-                    ))}
-                  </ul>
-
-                  {/* Tech stack */}
-                  <div className="flex flex-wrap gap-2">
-                    {exp.tech.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-2 py-1 bg-midnight/50 rounded text-xs text-text-muted border border-slate-medium"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
+              <ExperienceCard 
+                key={`${exp.company}-${exp.period}`} 
+                exp={exp} 
+                index={index}
+                isVisible={timelineVisible}
+              />
             ))}
           </div>
         </div>
@@ -193,4 +234,3 @@ export default function Experience() {
     </section>
   );
 }
-
