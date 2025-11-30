@@ -205,7 +205,9 @@ async function getPageContent(pageId: string): Promise<NotionBlock[]> {
 
     do {
       const url = `/blocks/${pageId}/children?page_size=100${cursor ? `&start_cursor=${cursor}` : ""}`;
+      console.log("Fetching blocks from:", url);
       const data = await notionFetch(url);
+      console.log("Received blocks:", data.results?.length || 0);
 
       for (const block of data.results) {
         blocks.push(block as NotionBlock);
@@ -215,8 +217,10 @@ async function getPageContent(pageId: string): Promise<NotionBlock[]> {
     } while (cursor);
   } catch (error) {
     console.error("Error fetching page content:", error);
+    // Return empty array - page will show placeholder
   }
 
+  console.log("Total blocks fetched:", blocks.length);
   return blocks;
 }
 
