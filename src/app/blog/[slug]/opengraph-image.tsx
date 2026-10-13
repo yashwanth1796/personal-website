@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { getPostBySlug } from "@/lib/notion";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 export const alt = "Blog Post";
 export const size = {
   width: 1200,
@@ -24,9 +24,9 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           width: "100%",
           display: "flex",
           flexDirection: "column",
-          backgroundColor: "#0A0F1C",
+          backgroundColor: "#0a0a0f",
           backgroundImage:
-            "radial-gradient(circle at 25% 25%, rgba(0, 240, 255, 0.15) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(168, 85, 247, 0.15) 0%, transparent 50%)",
+            "radial-gradient(circle at 25% 25%, rgba(16, 185, 129, 0.15) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.15) 0%, transparent 50%)",
           padding: "60px 80px",
         }}
       >
@@ -48,10 +48,10 @@ export default async function Image({ params }: { params: Promise<{ slug: string
               key={i}
               style={{
                 padding: "8px 16px",
-                backgroundColor: "rgba(0, 240, 255, 0.15)",
-                border: "1px solid rgba(0, 240, 255, 0.3)",
+                backgroundColor: "rgba(16, 185, 129, 0.15)",
+                border: "1px solid rgba(16, 185, 129, 0.3)",
                 borderRadius: 20,
-                color: "#00F0FF",
+                color: "#10b981",
                 fontSize: 16,
                 fontWeight: 600,
               }}
@@ -92,13 +92,13 @@ export default async function Image({ params }: { params: Promise<{ slug: string
                 width: 56,
                 height: 56,
                 borderRadius: 12,
-                background: "linear-gradient(135deg, #00F0FF 0%, #A855F7 100%)",
+                background: "linear-gradient(135deg, #10b981 0%, #8b5cf6 100%)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 fontSize: 24,
                 fontWeight: "bold",
-                color: "#0A0F1C",
+                color: "#0a0a0f",
               }}
             >
               YV

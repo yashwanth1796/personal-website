@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const runtime = "edge";
+export const runtime = "nodejs";
 export const alt = "Yashwanth Kumar Vandanapu - Senior Software Engineer";
 export const size = {
   width: 1200,
@@ -19,9 +19,9 @@ export default async function Image() {
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
-          backgroundColor: "#0A0F1C",
+          backgroundColor: "#0a0a0f",
           backgroundImage:
-            "radial-gradient(circle at 25% 25%, rgba(0, 240, 255, 0.15) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(168, 85, 247, 0.15) 0%, transparent 50%)",
+            "radial-gradient(circle at 25% 25%, rgba(16, 185, 129, 0.15) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(139, 92, 246, 0.15) 0%, transparent 50%)",
         }}
       >
         {/* Grid pattern */}
@@ -51,13 +51,13 @@ export default async function Image() {
               width: 120,
               height: 120,
               borderRadius: 24,
-              background: "linear-gradient(135deg, #00F0FF 0%, #A855F7 100%)",
+              background: "linear-gradient(135deg, #10b981 0%, #8b5cf6 100%)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               fontSize: 48,
               fontWeight: "bold",
-              color: "#0A0F1C",
+              color: "#0a0a0f",
               marginBottom: 32,
             }}
           >
@@ -81,7 +81,7 @@ export default async function Image() {
           <div
             style={{
               fontSize: 28,
-              color: "#00F0FF",
+              color: "#10b981",
               marginBottom: 24,
             }}
           >

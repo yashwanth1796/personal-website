@@ -21,7 +21,7 @@ export default function BlogPageClient({ posts, tags }: BlogPageClientProps) {
     : posts;
 
   return (
-    <main className="min-h-screen bg-midnight pt-24 pb-16">
+    <main id="main-content" tabIndex={-1} className="min-h-screen bg-midnight pt-24 pb-16">
       {/* Header */}
       <header className="max-w-4xl mx-auto px-6 mb-12">
         <Link
@@ -64,9 +64,10 @@ export default function BlogPageClient({ posts, tags }: BlogPageClientProps) {
       </header>
 
       {/* Tags Filter */}
-      <section className="max-w-4xl mx-auto px-6 mb-8">
+      <section aria-label="Filter articles by topic" className="max-w-4xl mx-auto px-6 mb-8">
         <div className="flex flex-wrap gap-2">
           <button
+            aria-pressed={selectedTag === null}
             onClick={() => setSelectedTag(null)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
               selectedTag === null
@@ -79,6 +80,7 @@ export default function BlogPageClient({ posts, tags }: BlogPageClientProps) {
           {tags.map((tag) => (
             <button
               key={tag}
+              aria-pressed={selectedTag === tag}
               onClick={() => setSelectedTag(tag)}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
                 selectedTag === tag
@@ -109,16 +111,16 @@ export default function BlogPageClient({ posts, tags }: BlogPageClientProps) {
             ))}
           </div>
         ) : (
-          <div className="text-center py-16">
+          <div className="text-center py-16" role="status">
             <p className="text-text-muted text-lg">
-              No posts found with the selected tag.
+              {posts.length === 0 ? "Articles are on the way. Check back soon." : "No posts found with the selected tag."}
             </p>
-            <button
+            {selectedTag && <button
               onClick={() => setSelectedTag(null)}
               className="mt-4 text-accent hover:underline"
             >
               Clear filter
-            </button>
+            </button>}
           </div>
         )}
       </section>
@@ -126,7 +128,7 @@ export default function BlogPageClient({ posts, tags }: BlogPageClientProps) {
       {/* CTA */}
       <section className="max-w-4xl mx-auto px-6 mt-16">
         <div className="p-8 bg-gradient-to-br from-accent/5 to-secondary/5 rounded-2xl border border-accent/20 text-center">
-          <h3 className="text-2xl font-bold mb-2">Want to Connect?</h3>
+          <h2 className="text-2xl font-bold mb-2">Want to Connect?</h2>
           <p className="text-text-secondary mb-6">
             Have questions about these topics or want to discuss a project?
           </p>

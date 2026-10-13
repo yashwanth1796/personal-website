@@ -1,5 +1,3 @@
-"use client";
-
 export default function Footer() {
   const currentYear = new Date().getFullYear();
 
@@ -58,7 +56,7 @@ export default function Footer() {
         {/* Built with */}
         <div className="mt-8 pt-8 border-t border-slate-dark text-center">
           <p className="text-text-muted text-sm">
-            Built with <span className="text-accent">Next.js</span> & <span className="text-secondary">Tailwind CSS</span>
+            Built with <span className="text-accent">Next.js</span> & <span className="text-secondary-light">Tailwind CSS</span>
           </p>
         </div>
       </div>

@@ -63,7 +63,7 @@ export default function Contact() {
         {/* Contact Methods */}
         <div 
           ref={cardsRef as React.RefObject<HTMLDivElement>}
-          className="grid md:grid-cols-3 gap-6 mb-12"
+          className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"
         >
           {contactMethods.map((method, index) => (
             <a
@@ -71,7 +71,7 @@ export default function Contact() {
               href={method.href}
               target={method.href.startsWith("http") ? "_blank" : undefined}
               rel={method.href.startsWith("http") ? "noopener noreferrer" : undefined}
-              className={`group p-6 bg-slate-dark/50 rounded-2xl border border-slate-medium hover:border-accent transition-all text-center card-hover ${
+              className={`group min-w-0 p-6 bg-slate-dark/50 rounded-2xl border border-slate-medium hover:border-accent transition-all text-center card-hover ${
                 cardsVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
               }`}
               style={{ 
@@ -83,7 +83,7 @@ export default function Contact() {
                 {method.icon}
               </div>
               <p className="text-text-muted text-sm uppercase tracking-wider mb-1">{method.label}</p>
-              <p className="text-text-primary font-medium group-hover:text-accent transition-colors">
+              <p className="text-text-primary font-medium break-words group-hover:text-accent transition-colors">
                 {method.value}
               </p>
             </a>

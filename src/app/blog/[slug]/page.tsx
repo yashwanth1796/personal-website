@@ -1,3 +1,4 @@
+import { serializeJsonLd } from "@/lib/serialization";
 import { getPostBySlug, getAllPosts, calculateReadingTime } from "@/lib/notion";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
@@ -35,7 +36,7 @@ export async function generateMetadata({
       publishedTime: post.date,
       authors: ["Yashwanth Kumar Vandanapu"],
       tags: post.tags,
-      url: `${siteUrl}/blog/${slug}`,
+      url: `${siteUrl}/blog/${encodeURIComponent(slug)}`,
     },
     twitter: {
       card: "summary_large_image",
@@ -43,7 +44,7 @@ export async function generateMetadata({
       description: post.description,
     },
     alternates: {
-      canonical: `${siteUrl}/blog/${slug}`,
+      canonical: `${siteUrl}/blog/${encodeURIComponent(slug)}`,
     },
   };
 }
@@ -70,6 +71,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "UTC",
   });
 
   // JSON-LD for Article
@@ -91,10 +93,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       name: "Yashwanth Kumar Vandanapu",
       url: siteUrl,
     },
-    url: `${siteUrl}/blog/${slug}`,
+    url: `${siteUrl}/blog/${encodeURIComponent(slug)}`,
     mainEntityOfPage: {
       "@type": "WebPage",
-      "@id": `${siteUrl}/blog/${slug}`,
+      "@id": `${siteUrl}/blog/${encodeURIComponent(slug)}`,
     },
     keywords: post.tags.join(", "),
     articleSection: "Technology",
@@ -107,9 +109,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
       />
-      <main className="min-h-screen bg-midnight">
+      <main id="main-content" tabIndex={-1} className="min-h-screen bg-midnight">
       {/* Hero Section */}
       <div className="relative pt-24 pb-16 overflow-hidden">
         {/* Background gradient */}

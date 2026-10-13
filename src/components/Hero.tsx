@@ -1,5 +1,3 @@
-"use client";
-
 export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -13,7 +11,7 @@ export default function Hero() {
       <div className="absolute bottom-40 left-1/4 w-3 h-3 bg-secondary rounded-full animate-float delay-300 opacity-60" />
       <div className="absolute top-1/2 right-20 w-2 h-2 bg-accent-light rounded-full animate-float delay-500 opacity-40" />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6 text-center">
+      <div className="relative z-10 max-w-6xl mx-auto px-6 py-28 text-center">
         {/* Status Badge */}
         <div className="inline-flex items-center gap-2 px-4 py-2 bg-slate-dark/50 rounded-full border border-slate-medium mb-8 animate-fade-in">
           <span className="w-2 h-2 bg-accent rounded-full animate-pulse" />
@@ -65,8 +63,10 @@ export default function Hero() {
           </a>
         </div>
 
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce">
+      </div>
+
+      {/* Scroll Indicator */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -77,7 +77,6 @@ export default function Hero() {
           >
             <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
           </svg>
-        </div>
       </div>
     </section>
   );

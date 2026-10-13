@@ -14,6 +14,7 @@ export default function BlogCard({ post, index, isVisible }: BlogCardProps) {
     year: "numeric",
     month: "long",
     day: "numeric",
+    timeZone: "UTC",
   });
 
   // Generate gradient based on tags
@@ -38,8 +39,8 @@ export default function BlogCard({ post, index, isVisible }: BlogCardProps) {
 
   return (
     <Link
-      href={`/blog/${post.slug}`}
-      className={`group block p-6 rounded-2xl border border-slate-medium bg-slate-dark/30 hover:border-slate-light transition-all card-tilt ${
+      href={`/blog/${encodeURIComponent(post.slug)}`}
+      className={`group relative block p-6 rounded-2xl border border-slate-medium bg-slate-dark/30 hover:border-slate-light transition-all card-tilt ${
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
       }`}
       style={{
@@ -52,7 +53,11 @@ export default function BlogCard({ post, index, isVisible }: BlogCardProps) {
         className={`absolute top-0 left-0 right-0 h-1 rounded-t-2xl bg-gradient-to-r ${getGradient()} opacity-60 group-hover:opacity-100 transition-opacity`}
       />
 
-      {/* Cover image placeholder or gradient */}
+      {post.coverImage ? (
+        // Notion provides short-lived signed image URLs; keep them on the article revalidation cycle.
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={post.coverImage} alt="" loading="lazy" decoding="async" width={640} height={320} className="w-full h-32 object-cover rounded-xl mb-4" />
+      ) : (
       <div
         className={`w-full h-32 rounded-xl mb-4 bg-gradient-to-br ${getGradient()} opacity-20 group-hover:opacity-30 transition-opacity flex items-center justify-center`}
       >
@@ -70,6 +75,8 @@ export default function BlogCard({ post, index, isVisible }: BlogCardProps) {
           />
         </svg>
       </div>
+
+      )}
 
       {/* Tags */}
       <div className="flex flex-wrap gap-2 mb-3">

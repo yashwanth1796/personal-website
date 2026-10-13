@@ -1,4 +1,5 @@
-import { getAllPosts, getAllTags } from "@/lib/notion";
+import { serializeJsonLd } from "@/lib/serialization";
+import { getAllPosts } from "@/lib/notion";
 import type { Metadata } from "next";
 import BlogPageClient from "./BlogPageClient";
 
@@ -42,7 +43,8 @@ export const metadata: Metadata = {
 export const revalidate = 3600; // Revalidate every hour
 
 export default async function BlogPage() {
-  const [posts, tags] = await Promise.all([getAllPosts(), getAllTags()]);
+  const posts = await getAllPosts();
+  const tags = [...new Set(posts.flatMap((post) => post.tags))].sort();
 
   // JSON-LD for Blog listing
   const jsonLd = {
@@ -62,7 +64,7 @@ export default async function BlogPage() {
       headline: post.title,
       description: post.description,
       datePublished: post.date,
-      url: `${siteUrl}/blog/${post.slug}`,
+      url: `${siteUrl}/blog/${encodeURIComponent(post.slug)}`,
       author: {
         "@type": "Person",
         name: "Yashwanth Kumar Vandanapu",
@@ -75,7 +77,7 @@ export default async function BlogPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
       />
       <BlogPageClient posts={posts} tags={tags} />
     </>

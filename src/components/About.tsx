@@ -10,7 +10,7 @@ const highlights = [
 ];
 
 export default function About() {
-  const { ref: sectionRef, isVisible: sectionVisible } = useScrollAnimation({ threshold: 0.1 });
+  const { ref: sectionRef } = useScrollAnimation({ threshold: 0.1 });
   const { ref: contentRef, isVisible: contentVisible } = useScrollAnimation({ threshold: 0.2 });
   const { ref: statsRef, isVisible: statsVisible } = useScrollAnimation({ threshold: 0.2 });
 

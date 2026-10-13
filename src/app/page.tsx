@@ -9,7 +9,7 @@ import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-midnight">
+    <main id="main-content" tabIndex={-1} className="min-h-screen bg-midnight">
       <Header />
       <Hero />
       <About />

@@ -154,6 +154,8 @@ export default function Projects() {
 
                 <div className={index === 0 ? "md:flex-1" : ""}>
                   {/* Highlights */}
+                  <details open={index === 0} className="mb-4">
+                  <summary className="cursor-pointer text-accent font-medium mb-4">Explore project details</summary>
                   <ul className="space-y-2 mb-4">
                     {project.highlights.map((highlight, i) => (
                       <li 
@@ -170,6 +172,8 @@ export default function Projects() {
                       </li>
                     ))}
                   </ul>
+
+                  </details>
 
                   {/* Tech stack */}
                   <div className="flex flex-wrap gap-2">

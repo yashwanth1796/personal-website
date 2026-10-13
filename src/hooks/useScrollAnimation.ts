@@ -36,18 +36,25 @@ export function useScrollAnimation(
   } = options;
 
   const ref = useRef<HTMLElement | null>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  // Server-rendered content remains readable before hydration or without JavaScript.
+  const [isVisible, setIsVisible] = useState(true);
   const [hasAnimated, setHasAnimated] = useState(false);
 
   useEffect(() => {
     const element = ref.current;
-    if (!element) return;
+    if (!element || !("IntersectionObserver" in window)) return;
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (reducedMotion.matches) return;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let hasEntered = false;
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) {
+        if (entry.isIntersecting || reducedMotion.matches) {
+          hasEntered = true;
+          if (timer) clearTimeout(timer);
           if (delay > 0) {
-            setTimeout(() => {
+            timer = setTimeout(() => {
               setIsVisible(true);
               setHasAnimated(true);
             }, delay);
@@ -59,17 +66,28 @@ export function useScrollAnimation(
           if (triggerOnce) {
             observer.unobserve(element);
           }
-        } else if (!triggerOnce) {
+        } else if (!hasEntered || !triggerOnce) {
+          if (timer) clearTimeout(timer);
           setIsVisible(false);
         }
       },
       { threshold, rootMargin }
     );
 
+    const showForReducedMotion = () => {
+      if (reducedMotion.matches) {
+        if (timer) clearTimeout(timer);
+        setIsVisible(true);
+        observer.disconnect();
+      }
+    };
+    reducedMotion.addEventListener("change", showForReducedMotion);
     observer.observe(element);
 
     return () => {
       observer.disconnect();
+      if (timer) clearTimeout(timer);
+      reducedMotion.removeEventListener("change", showForReducedMotion);
     };
   }, [threshold, rootMargin, triggerOnce, delay]);
 
@@ -89,8 +107,8 @@ export function useStaggerAnimation(
   const { ref, isVisible } = useScrollAnimation(scrollOptions);
 
   const getChildDelay = useCallback(
-    (index: number) => (isVisible ? index * staggerDelay : 0),
-    [isVisible, staggerDelay]
+    (index: number) => (isVisible ? Math.min(index, Math.max(0, childCount - 1)) * staggerDelay : 0),
+    [isVisible, staggerDelay, childCount]
   );
 
   return { ref, isVisible, getChildDelay };

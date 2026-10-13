@@ -1,5 +1,11 @@
+import { Syne, DM_Sans, JetBrains_Mono } from "next/font/google";
+import { serializeJsonLd } from "@/lib/serialization";
 import type { Metadata } from "next";
 import "./globals.css";
+
+const displayFont = Syne({ subsets: ["latin"], variable: "--font-display", display: "swap" });
+const bodyFont = DM_Sans({ subsets: ["latin"], variable: "--font-body", display: "swap" });
+const monoFont = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
 
 const siteUrl = "https://yashwanth-vandanapu.dev";
 
@@ -52,7 +58,7 @@ export const metadata: Metadata = {
       "Senior Software Engineer specializing in React, Next.js, AI/LLM integrations, and enterprise-scale platforms. 7+ years of experience building accessible, high-performance web applications.",
     images: [
       {
-        url: "/og-image.png",
+        url: "/opengraph-image",
         width: 1200,
         height: 630,
         alt: "Yashwanth Kumar Vandanapu - Senior Software Engineer",
@@ -64,7 +70,7 @@ export const metadata: Metadata = {
     title: "Yashwanth Kumar Vandanapu | Senior Software Engineer",
     description:
       "Senior Software Engineer specializing in React, Next.js, AI/LLM integrations, and enterprise-scale platforms.",
-    images: ["/og-image.png"],
+    images: ["/opengraph-image"],
     creator: "@yashwanth_v",
   },
   alternates: {
@@ -90,11 +96,11 @@ const jsonLd = {
       "@id": `${siteUrl}/#person`,
       name: "Yashwanth Kumar Vandanapu",
       url: siteUrl,
-      image: `${siteUrl}/og-image.png`,
+      image: `${siteUrl}/opengraph-image`,
       jobTitle: "Senior Software Engineer",
       worksFor: {
         "@type": "Organization",
-        name: "Deloitte",
+        name: "SurveyMonkey",
       },
       alumniOf: [
         {
@@ -132,11 +138,7 @@ const jsonLd = {
       publisher: {
         "@id": `${siteUrl}/#person`,
       },
-      potentialAction: {
-        "@type": "SearchAction",
-        target: `${siteUrl}/blog?q={search_term_string}`,
-        "query-input": "required name=search_term_string",
-      },
+
     },
     {
       "@type": "ProfilePage",
@@ -158,23 +160,18 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=JetBrains+Mono:wght@400;500;600&family=Syne:wght@400;500;600;700;800&display=swap"
-          rel="stylesheet"
-        />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#00F0FF" />
+        <meta name="theme-color" content="#10b981" />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
         />
       </head>
-      <body className="antialiased">
+      <body className={`${displayFont.variable} ${bodyFont.variable} ${monoFont.variable} antialiased`}>
+        <a href="#main-content" className="skip-link">Skip to content</a>
         {children}
       </body>
     </html>

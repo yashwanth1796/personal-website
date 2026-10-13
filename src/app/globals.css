@@ -1,9 +1,9 @@
 @import "tailwindcss";
 
 @theme {
-  --font-family-display: "Syne", system-ui, sans-serif;
-  --font-family-body: "DM Sans", system-ui, sans-serif;
-  --font-family-mono: "JetBrains Mono", ui-monospace, monospace;
+  --font-family-display: var(--font-display), system-ui, sans-serif;
+  --font-family-body: var(--font-body), system-ui, sans-serif;
+  --font-family-mono: var(--font-mono), ui-monospace, monospace;
   
   --color-midnight: #0a0a0f;
   --color-obsidian: #12121a;
@@ -20,7 +20,7 @@
   
   --color-text-primary: #f4f4f5;
   --color-text-secondary: #a1a1aa;
-  --color-text-muted: #71717a;
+  --color-text-muted: #94949e;
 }
 
 @layer base {
@@ -300,3 +300,34 @@
 .stagger-6 { transition-delay: 500ms; }
 .stagger-7 { transition-delay: 600ms; }
 .stagger-8 { transition-delay: 700ms; }
+
+/* Keep anchored headings clear of the fixed navigation. */
+section[id] { scroll-margin-top: 6rem; }
+
+:focus-visible {
+  outline: 2px solid var(--color-accent-light);
+  outline-offset: 4px;
+}
+
+.skip-link {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 100;
+  transform: translateY(-200%);
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--color-accent);
+  color: var(--color-midnight);
+}
+.skip-link:focus { transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0ms !important;
+  }
+}

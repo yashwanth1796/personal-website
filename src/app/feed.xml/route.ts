@@ -1,3 +1,4 @@
+import { escapeXml } from "@/lib/serialization";
 import { getAllPosts } from "@/lib/notion";
 
 const siteUrl = "https://yashwanth-vandanapu.dev";
@@ -17,7 +18,7 @@ export async function GET() {
     <managingEditor>yashwanth.vandanapu@gmail.com (Yashwanth Kumar Vandanapu)</managingEditor>
     <webMaster>yashwanth.vandanapu@gmail.com (Yashwanth Kumar Vandanapu)</webMaster>
     <image>
-      <url>${siteUrl}/og-image.png</url>
+      <url>${siteUrl}/icon-192.png</url>
       <title>Yashwanth Kumar Vandanapu - Blog</title>
       <link>${siteUrl}</link>
     </image>
@@ -25,12 +26,12 @@ export async function GET() {
       .map(
         (post) => `
     <item>
-      <title><![CDATA[${post.title}]]></title>
-      <link>${siteUrl}/blog/${post.slug}</link>
-      <guid isPermaLink="true">${siteUrl}/blog/${post.slug}</guid>
-      <description><![CDATA[${post.description}]]></description>
+      <title>${escapeXml(post.title)}</title>
+      <link>${escapeXml(`${siteUrl}/blog/${encodeURIComponent(post.slug)}`)}</link>
+      <guid isPermaLink="true">${escapeXml(`${siteUrl}/blog/${encodeURIComponent(post.slug)}`)}</guid>
+      <description>${escapeXml(post.description)}</description>
       <pubDate>${new Date(post.date).toUTCString()}</pubDate>
-      ${post.tags.map((tag) => `<category>${tag}</category>`).join("\n      ")}
+      ${post.tags.map((tag) => `<category>${escapeXml(tag)}</category>`).join("\n      ")}
       <author>yashwanth.vandanapu@gmail.com (Yashwanth Kumar Vandanapu)</author>
     </item>`
       )

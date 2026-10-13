@@ -112,13 +112,13 @@ const experiences = [
 function ExperienceCard({ exp, index, isVisible }: { exp: typeof experiences[0]; index: number; isVisible: boolean }) {
   return (
     <div 
-      className={`relative pl-20 transition-all duration-700 ease-out ${
+      className={`relative pl-10 sm:pl-20 transition-all duration-700 ease-out ${
         isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
       }`}
       style={{ transitionDelay: isVisible ? `${index * 150}ms` : "0ms" }}
     >
       {/* Timeline dot */}
-      <div className={`absolute left-6 top-1 w-5 h-5 rounded-full border-4 transition-all duration-500 ${
+      <div className={`absolute left-1 sm:left-6 top-1 w-5 h-5 rounded-full border-4 transition-all duration-500 ${
         exp.current 
           ? "bg-accent border-accent/30 animate-pulse-glow" 
           : "bg-slate-dark border-slate-medium"
@@ -135,7 +135,7 @@ function ExperienceCard({ exp, index, isVisible }: { exp: typeof experiences[0];
         {/* Header */}
         <div className="flex flex-wrap items-start justify-between gap-4 mb-4">
           <div>
-            <h3 className="text-xl font-bold flex items-center gap-2">
+            <h3 className="text-xl font-bold flex flex-wrap items-center gap-2">
               {exp.company}
               {exp.current && (
                 <span className="px-2 py-0.5 bg-accent/20 text-accent text-xs rounded-full font-medium">
@@ -213,7 +213,7 @@ export default function Experience() {
         <div ref={timelineRef as React.RefObject<HTMLDivElement>} className="relative">
           {/* Timeline line */}
           <div 
-            className={`absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-accent via-secondary to-slate-dark transition-all duration-1000 ease-out origin-top ${
+            className={`absolute left-3 sm:left-8 top-0 bottom-0 w-px bg-gradient-to-b from-accent via-secondary to-slate-dark transition-all duration-1000 ease-out origin-top ${
               timelineVisible ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"
             }`} 
           />

@@ -1,7 +1,27 @@
-"use client";
-
 import { Fragment } from "react";
 import type { NotionBlock } from "@/lib/notion";
+
+// CMS URLs must use a browser-safe protocol.
+function safeUrl(value: string | undefined | null, links = false): string | null {
+  if (!value) return null;
+  try {
+    const url = new URL(value, "https://yashwanth-vandanapu.dev");
+    return ["https:", "http:", ...(links ? ["mailto:", "tel:"] : [])].includes(url.protocol) ? value : null;
+  } catch { return null; }
+}
+
+function youtubeEmbed(value: string): string | null {
+  try {
+    const url = new URL(value);
+    let id: string | null = null;
+    if (["youtube.com", "www.youtube.com", "m.youtube.com"].includes(url.hostname)) {
+      id = url.pathname === "/watch" ? url.searchParams.get("v") : url.pathname.match(/^\/(?:embed|shorts)\/([^/]+)$/)?.[1] || null;
+    } else if (url.hostname === "youtu.be") {
+      id = url.pathname.slice(1);
+    }
+    return id && /^[\w-]{11}$/.test(id) ? `https://www.youtube-nocookie.com/embed/${id}` : null;
+  } catch { return null; }
+}
 
 interface NotionRendererProps {
   blocks: NotionBlock[];
@@ -47,11 +67,12 @@ function RichText({ richText }: { richText: RichTextItem[] }) {
           </span>
         );
 
-        if (href) {
+        const link = safeUrl(href, true);
+        if (link) {
           return (
             <a
               key={index}
-              href={href}
+              href={link}
               target="_blank"
               rel="noopener noreferrer"
               className="text-accent hover:underline underline-offset-2 decoration-accent/50"
@@ -133,6 +154,7 @@ function Block({ block }: { block: NotionBlock }) {
       return (
         <li className="ml-6 mb-3 text-text-secondary text-lg leading-[1.8] list-disc marker:text-accent">
           <RichText richText={b.bulleted_list_item?.rich_text || []} />
+          {block.children?.length ? <NotionRenderer blocks={block.children} /> : null}
         </li>
       );
 
@@ -140,6 +162,7 @@ function Block({ block }: { block: NotionBlock }) {
       return (
         <li className="ml-6 mb-3 text-text-secondary text-lg leading-[1.8] list-decimal marker:text-accent marker:font-semibold">
           <RichText richText={b.numbered_list_item?.rich_text || []} />
+          {block.children?.length ? <NotionRenderer blocks={block.children} /> : null}
         </li>
       );
 
@@ -147,6 +170,8 @@ function Block({ block }: { block: NotionBlock }) {
       return (
         <div className="flex items-start gap-3 mb-3 text-text-secondary">
           <input
+            aria-label={b.to_do?.rich_text.map((text) => text.plain_text).join("") || "Task"}
+            disabled
             type="checkbox"
             checked={b.to_do?.checked}
             readOnly
@@ -174,7 +199,7 @@ function Block({ block }: { block: NotionBlock }) {
             <RichText richText={b.toggle?.rich_text || []} />
           </summary>
           <div className="mt-2 ml-7 pl-4 border-l-2 border-accent/30">
-            {/* Toggle children would go here */}
+            {block.children?.length ? <NotionRenderer blocks={block.children} /> : null}
           </div>
         </details>
       );
@@ -242,13 +267,15 @@ function Block({ block }: { block: NotionBlock }) {
         : b.image?.external?.url;
       const caption = b.image?.caption?.map((c) => c.plain_text).join("") || null;
 
-      if (!imageUrl) return null;
+      if (!safeUrl(imageUrl)) return null;
 
       return (
         <figure className="my-10">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={imageUrl}
+            loading="lazy"
+            decoding="async"
             alt={caption || "Blog image"}
             className="w-full rounded-2xl border border-slate-medium shadow-xl shadow-black/20"
           />
@@ -266,17 +293,19 @@ function Block({ block }: { block: NotionBlock }) {
         ? b.video.file?.url
         : b.video?.external?.url;
       
-      if (!videoUrl) return null;
+      if (!videoUrl || !safeUrl(videoUrl)) return null;
+      const embed = youtubeEmbed(videoUrl);
+      if (embed) return <iframe src={embed} title="YouTube video" loading="lazy" className="my-10 w-full aspect-video rounded-2xl" allowFullScreen />;
 
       return (
         <div className="my-10 rounded-2xl overflow-hidden border border-slate-medium shadow-xl shadow-black/20">
-          <video src={videoUrl} controls className="w-full" />
+          <video src={videoUrl} preload="metadata" controls className="w-full" />
         </div>
       );
     }
 
     case "bookmark":
-      if (!b.bookmark?.url) return null;
+      if (!b.bookmark?.url || !safeUrl(b.bookmark.url, true)) return null;
       return (
         <a
           href={b.bookmark.url}
@@ -295,33 +324,24 @@ function Block({ block }: { block: NotionBlock }) {
         </a>
       );
 
-    case "embed":
-      if (!b.embed?.url) return null;
-      
-      // Handle YouTube embeds
-      const youtubeMatch = b.embed.url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([^&\s]+)/);
-      if (youtubeMatch) {
-        return (
-          <div className="my-10 rounded-2xl overflow-hidden border border-slate-medium shadow-xl shadow-black/20 aspect-video">
-            <iframe
-              src={`https://www.youtube.com/embed/${youtubeMatch[1]}`}
-              className="w-full h-full"
-              allowFullScreen
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            />
-          </div>
-        );
-      }
-
+    case "embed": {
+      const url = safeUrl(b.embed?.url);
+      if (!url) return null;
+      const youtube = youtubeEmbed(url);
       return (
         <div className="my-10 rounded-2xl overflow-hidden border border-slate-medium">
           <iframe
-            src={b.embed.url}
-            className="w-full h-96"
+            src={youtube || url}
+            title={youtube ? "YouTube video" : "Embedded content"}
+            loading="lazy"
+            sandbox="allow-scripts allow-same-origin allow-presentation"
+            referrerPolicy="strict-origin-when-cross-origin"
+            className={`w-full ${youtube ? "aspect-video" : "h-96"}`}
             allowFullScreen
           />
         </div>
       );
+    }
 
     default:
       return null;
@@ -337,13 +357,23 @@ export default function NotionRenderer({ blocks }: NotionRendererProps) {
     );
   }
 
-  return (
-    <div className="notion-content">
-      {blocks.map((block) => (
+  const elements = [];
+  for (let index = 0; index < blocks.length; index++) {
+    const block = blocks[index];
+    const isList = block.type === "bulleted_list_item" || block.type === "numbered_list_item";
+    if (isList) {
+      const items = [block];
+      while (blocks[index + 1]?.type === block.type) items.push(blocks[++index]);
+      const List = block.type === "numbered_list_item" ? "ol" : "ul";
+      elements.push(<List key={block.id} className="my-6">{items.map((item) => <Block key={item.id} block={item} />)}</List>);
+    } else {
+      elements.push(
         <Fragment key={block.id}>
           <Block block={block} />
+          {block.type !== "toggle" && block.children?.length ? <NotionRenderer blocks={block.children} /> : null}
         </Fragment>
-      ))}
-    </div>
-  );
+      );
+    }
+  }
+  return <div className="notion-content">{elements}</div>;
 }
