@@ -1,7 +1,3 @@
-"use client";
-
-import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-
 const experiences = [
   {
     company: "SurveyMonkey",
@@ -109,21 +105,17 @@ const experiences = [
   },
 ];
 
-function ExperienceCard({ exp, index, isVisible }: { exp: typeof experiences[0]; index: number; isVisible: boolean }) {
+function ExperienceCard({ exp, index }: { exp: typeof experiences[0]; index: number }) {
   return (
-    <div 
-      className={`relative pl-10 sm:pl-20 transition-all duration-700 ease-out ${
-        isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-8"
-      }`}
-      style={{ transitionDelay: isVisible ? `${index * 150}ms` : "0ms" }}
+    <div
+      className="relative pl-10 sm:pl-20 transition-all duration-700 ease-out"
     >
       {/* Timeline dot */}
       <div className={`absolute left-1 sm:left-6 top-1 w-5 h-5 rounded-full border-4 transition-all duration-500 ${
-        exp.current 
-          ? "bg-accent border-accent/30 animate-pulse-glow" 
+        exp.current
+          ? "bg-accent border-accent/30"
           : "bg-slate-dark border-slate-medium"
-      } ${isVisible ? "scale-100" : "scale-0"}`}
-        style={{ transitionDelay: isVisible ? `${index * 150 + 200}ms` : "0ms" }}
+      } `}
       />
 
       {/* Content card */}
@@ -157,12 +149,9 @@ function ExperienceCard({ exp, index, isVisible }: { exp: typeof experiences[0];
         {/* Highlights */}
         <ul className="space-y-2 mb-4">
           {exp.highlights.slice(0, index === 0 ? 6 : 3).map((highlight, i) => (
-            <li 
-              key={i} 
-              className={`flex items-start gap-2 text-sm text-text-secondary transition-all duration-500 ${
-                isVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
-              }`}
-              style={{ transitionDelay: isVisible ? `${index * 150 + 300 + i * 50}ms` : "0ms" }}
+            <li
+              key={i}
+              className="flex items-start gap-2 text-sm text-text-secondary transition-all duration-500"
             >
               <svg className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4" />
@@ -174,13 +163,10 @@ function ExperienceCard({ exp, index, isVisible }: { exp: typeof experiences[0];
 
         {/* Tech stack */}
         <div className="flex flex-wrap gap-2">
-          {exp.tech.map((tech, techIndex) => (
+          {exp.tech.map((tech) => (
             <span
               key={tech}
-              className={`px-2 py-1 bg-midnight/50 rounded text-xs text-text-muted border border-slate-medium hover:border-accent/50 hover:text-accent transition-all duration-300 ${
-                isVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
-              }`}
-              style={{ transitionDelay: isVisible ? `${index * 150 + 500 + techIndex * 30}ms` : "0ms" }}
+              className="px-2 py-1 bg-midnight/50 rounded text-xs text-text-muted border border-slate-medium hover:border-accent/50 hover:text-accent transition-all duration-300"
             >
               {tech}
             </span>
@@ -192,17 +178,12 @@ function ExperienceCard({ exp, index, isVisible }: { exp: typeof experiences[0];
 }
 
 export default function Experience() {
-  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation({ threshold: 0.3 });
-  const { ref: timelineRef, isVisible: timelineVisible } = useScrollAnimation({ threshold: 0.05 });
 
   return (
     <section id="experience" className="py-24 px-6 relative">
       <div className="max-w-4xl mx-auto">
-        <div 
-          ref={headerRef as React.RefObject<HTMLDivElement>}
-          className={`text-center mb-16 transition-all duration-700 ease-out ${
-            headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+        <div
+          className="text-center mb-16 transition-all duration-700 ease-out"
         >
           <p className="text-accent font-mono text-sm tracking-wider mb-4 uppercase">Career Journey</p>
           <h2 className="text-4xl md:text-5xl font-bold">
@@ -210,22 +191,19 @@ export default function Experience() {
           </h2>
         </div>
 
-        <div ref={timelineRef as React.RefObject<HTMLDivElement>} className="relative">
+        <div className="relative">
           {/* Timeline line */}
-          <div 
-            className={`absolute left-3 sm:left-8 top-0 bottom-0 w-px bg-gradient-to-b from-accent via-secondary to-slate-dark transition-all duration-1000 ease-out origin-top ${
-              timelineVisible ? "scale-y-100 opacity-100" : "scale-y-0 opacity-0"
-            }`} 
+          <div
+            className="absolute left-3 sm:left-8 top-0 bottom-0 w-px bg-gradient-to-b from-accent via-secondary to-slate-dark transition-all duration-1000 ease-out origin-top"
           />
 
           {/* Experience items */}
           <div className="space-y-12">
             {experiences.map((exp, index) => (
-              <ExperienceCard 
-                key={`${exp.company}-${exp.period}`} 
-                exp={exp} 
+              <ExperienceCard
+                key={`${exp.company}-${exp.period}`}
+                exp={exp}
                 index={index}
-                isVisible={timelineVisible}
               />
             ))}
           </div>

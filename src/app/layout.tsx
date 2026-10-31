@@ -1,11 +1,6 @@
-import { Syne, DM_Sans, JetBrains_Mono } from "next/font/google";
 import { serializeJsonLd } from "@/lib/serialization";
 import type { Metadata } from "next";
 import "./globals.css";
-
-const displayFont = Syne({ subsets: ["latin"], variable: "--font-display", display: "swap" });
-const bodyFont = DM_Sans({ subsets: ["latin"], variable: "--font-body", display: "swap" });
-const monoFont = JetBrains_Mono({ subsets: ["latin"], variable: "--font-mono", display: "swap" });
 
 const siteUrl = "https://yashwanth-vandanapu.dev";
 
@@ -164,13 +159,13 @@ export default function RootLayout({
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#10b981" />
+        <meta name="theme-color" content="#f7f4ed" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}
         />
       </head>
-      <body className={`${displayFont.variable} ${bodyFont.variable} ${monoFont.variable} antialiased`}>
+      <body className="antialiased">
         <a href="#main-content" className="skip-link">Skip to content</a>
         {children}
       </body>

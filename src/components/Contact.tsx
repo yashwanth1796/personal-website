@@ -1,7 +1,3 @@
-"use client";
-
-import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-
 const contactMethods = [
   {
     icon: (
@@ -36,48 +32,34 @@ const contactMethods = [
 ];
 
 export default function Contact() {
-  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation({ threshold: 0.3 });
-  const { ref: cardsRef, isVisible: cardsVisible } = useScrollAnimation({ threshold: 0.2 });
-  const { ref: resumeRef, isVisible: resumeVisible } = useScrollAnimation({ threshold: 0.3 });
-  const { ref: ctaRef, isVisible: ctaVisible } = useScrollAnimation({ threshold: 0.5 });
 
   return (
     <section id="contact" className="py-24 px-6 relative">
       <div className="max-w-4xl mx-auto">
-        <div 
-          ref={headerRef as React.RefObject<HTMLDivElement>}
-          className={`text-center mb-16 transition-all duration-700 ease-out ${
-            headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+        <div
+          className="text-center mb-16 transition-all duration-700 ease-out"
         >
           <p className="text-accent font-mono text-sm tracking-wider mb-4 uppercase">Get In Touch</p>
           <h2 className="text-4xl md:text-5xl font-bold mb-4">
             Let&apos;s Work <span className="text-gradient">Together</span>
           </h2>
           <p className="text-text-secondary text-lg max-w-2xl mx-auto">
-            I&apos;m currently open to new opportunities. Whether you have a project in mind 
+            I&apos;m currently open to new opportunities. Whether you have a project in mind
             or just want to connect, I&apos;d love to hear from you.
           </p>
         </div>
 
         {/* Contact Methods */}
-        <div 
-          ref={cardsRef as React.RefObject<HTMLDivElement>}
+        <div
           className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12"
         >
-          {contactMethods.map((method, index) => (
+          {contactMethods.map((method) => (
             <a
               key={method.label}
               href={method.href}
               target={method.href.startsWith("http") ? "_blank" : undefined}
               rel={method.href.startsWith("http") ? "noopener noreferrer" : undefined}
-              className={`group min-w-0 p-6 bg-slate-dark/50 rounded-2xl border border-slate-medium hover:border-accent transition-all text-center card-hover ${
-                cardsVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-              }`}
-              style={{ 
-                transitionDelay: cardsVisible ? `${index * 100}ms` : "0ms",
-                transitionDuration: "600ms"
-              }}
+              className="group min-w-0 p-6 bg-slate-dark/50 rounded-2xl border border-slate-medium hover:border-accent transition-all text-center card-hover"
             >
               <div className="inline-flex p-4 bg-slate-medium rounded-xl text-text-secondary group-hover:bg-accent/20 group-hover:text-accent transition-all mb-4 group-hover:scale-110 icon-bounce">
                 {method.icon}
@@ -91,11 +73,8 @@ export default function Contact() {
         </div>
 
         {/* Resume Downloads */}
-        <div 
-          ref={resumeRef as React.RefObject<HTMLDivElement>}
-          className={`p-8 bg-gradient-to-br from-accent/5 to-secondary/5 rounded-2xl border border-accent/20 transition-all duration-700 ${
-            resumeVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+        <div
+          className="p-8 bg-gradient-to-br from-accent/5 to-secondary/5 rounded-2xl border border-accent/20 transition-all duration-700"
         >
           <div className="text-center mb-6">
             <h3 className="text-2xl font-bold mb-2">Download My Resume</h3>
@@ -103,15 +82,12 @@ export default function Contact() {
               Get a detailed overview of my experience and qualifications
             </p>
           </div>
-          
+
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <a
               href="/Resume - Frontend.pdf"
               download
-              className={`group flex items-center gap-3 px-6 py-4 bg-accent text-midnight font-semibold rounded-xl hover:bg-accent-light transition-all hover:shadow-lg hover:shadow-accent/20 w-full sm:w-auto justify-center btn-ripple hover:scale-105 ${
-                resumeVisible ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-4"
-              }`}
-              style={{ transitionDelay: resumeVisible ? "200ms" : "0ms", transitionDuration: "500ms" }}
+              className="group flex items-center gap-3 px-6 py-4 bg-accent text-midnight font-semibold rounded-xl hover:bg-accent-light transition-all hover:shadow-lg hover:shadow-accent/20 w-full sm:w-auto justify-center btn-ripple hover:scale-105"
             >
               <svg className="w-5 h-5 group-hover:animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -121,10 +97,7 @@ export default function Contact() {
             <a
               href="/Resume - FullStack.pdf"
               download
-              className={`group flex items-center gap-3 px-6 py-4 bg-secondary text-white font-semibold rounded-xl hover:bg-secondary-light transition-all hover:shadow-lg hover:shadow-secondary/20 w-full sm:w-auto justify-center btn-ripple hover:scale-105 ${
-                resumeVisible ? "opacity-100 translate-x-0" : "opacity-0 translate-x-4"
-              }`}
-              style={{ transitionDelay: resumeVisible ? "300ms" : "0ms", transitionDuration: "500ms" }}
+              className="group flex items-center gap-3 px-6 py-4 bg-secondary text-white font-semibold rounded-xl hover:bg-secondary-light transition-all hover:shadow-lg hover:shadow-secondary/20 w-full sm:w-auto justify-center btn-ripple hover:scale-105"
             >
               <svg className="w-5 h-5 group-hover:animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -135,11 +108,8 @@ export default function Contact() {
         </div>
 
         {/* CTA */}
-        <div 
-          ref={ctaRef as React.RefObject<HTMLDivElement>}
-          className={`text-center mt-12 transition-all duration-700 ${
-            ctaVisible ? "opacity-100 scale-100" : "opacity-0 scale-95"
-          }`}
+        <div
+          className="text-center mt-12 transition-all duration-700"
         >
           <a
             href="mailto:yashwanth.vandanapu@gmail.com?subject=Let's Work Together"

@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Link from "next/link";
 import BlogCard from "@/components/BlogCard";
-import { useScrollAnimation } from "@/hooks/useScrollAnimation";
 import type { BlogPost } from "@/lib/notion";
 
 interface BlogPageClientProps {
@@ -13,8 +12,6 @@ interface BlogPageClientProps {
 
 export default function BlogPageClient({ posts, tags }: BlogPageClientProps) {
   const [selectedTag, setSelectedTag] = useState<string | null>(null);
-  const { ref: headerRef, isVisible: headerVisible } = useScrollAnimation({ threshold: 0.3 });
-  const { ref: gridRef, isVisible: gridVisible } = useScrollAnimation({ threshold: 0.1 });
 
   const filteredPosts = selectedTag
     ? posts.filter((post) => post.tags.includes(selectedTag))
@@ -45,10 +42,7 @@ export default function BlogPageClient({ posts, tags }: BlogPageClientProps) {
         </Link>
 
         <div
-          ref={headerRef as React.RefObject<HTMLDivElement>}
-          className={`transition-all duration-700 ease-out ${
-            headerVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-          }`}
+          className="transition-all duration-700 ease-out"
         >
           <p className="text-accent font-mono text-sm tracking-wider mb-4 uppercase">
             Blog
@@ -96,17 +90,14 @@ export default function BlogPageClient({ posts, tags }: BlogPageClientProps) {
 
       {/* Posts Grid */}
       <section
-        ref={gridRef as React.RefObject<HTMLElement>}
         className="max-w-4xl mx-auto px-6"
       >
         {filteredPosts.length > 0 ? (
           <div className="grid md:grid-cols-2 gap-6">
-            {filteredPosts.map((post, index) => (
+            {filteredPosts.map((post) => (
               <BlogCard
                 key={post.id}
                 post={post}
-                index={index}
-                isVisible={gridVisible}
               />
             ))}
           </div>

@@ -5,11 +5,9 @@ import type { BlogPost } from "@/lib/notion";
 
 interface BlogCardProps {
   post: BlogPost;
-  index: number;
-  isVisible: boolean;
 }
 
-export default function BlogCard({ post, index, isVisible }: BlogCardProps) {
+export default function BlogCard({ post }: BlogCardProps) {
   const formattedDate = new Date(post.date).toLocaleDateString("en-US", {
     year: "numeric",
     month: "long",
@@ -40,13 +38,7 @@ export default function BlogCard({ post, index, isVisible }: BlogCardProps) {
   return (
     <Link
       href={`/blog/${encodeURIComponent(post.slug)}`}
-      className={`group relative block p-6 rounded-2xl border border-slate-medium bg-slate-dark/30 hover:border-slate-light transition-all card-tilt ${
-        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-      }`}
-      style={{
-        transitionDelay: isVisible ? `${index * 100}ms` : "0ms",
-        transitionDuration: "600ms",
-      }}
+      className="group relative block p-6 rounded-2xl border border-slate-medium bg-slate-dark/30 hover:border-slate-light transition-all card-tilt"
     >
       {/* Gradient accent */}
       <div

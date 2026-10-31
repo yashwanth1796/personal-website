@@ -1,7 +1,3 @@
-"use client";
-
-import { useScrollAnimation } from "@/hooks/useScrollAnimation";
-
 const highlights = [
   { number: "7+", label: "Years Experience" },
   { number: "15+", label: "Projects Delivered" },
@@ -10,27 +6,18 @@ const highlights = [
 ];
 
 export default function About() {
-  const { ref: sectionRef } = useScrollAnimation({ threshold: 0.1 });
-  const { ref: contentRef, isVisible: contentVisible } = useScrollAnimation({ threshold: 0.2 });
-  const { ref: statsRef, isVisible: statsVisible } = useScrollAnimation({ threshold: 0.2 });
 
   return (
     <section id="about" className="py-24 px-6 relative">
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-obsidian/50 to-transparent" />
-      
-      <div 
-        ref={sectionRef as React.RefObject<HTMLDivElement>}
+
+      <div
         className="max-w-6xl mx-auto relative z-10"
       >
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Left: Content */}
           <div
-            ref={contentRef as React.RefObject<HTMLDivElement>}
-            className={`transition-all duration-700 ease-out ${
-              contentVisible 
-                ? "opacity-100 translate-x-0" 
-                : "opacity-0 -translate-x-12"
-            }`}
+            className="transition-all duration-700 ease-out"
           >
             <p className="text-accent font-mono text-sm tracking-wider mb-4 uppercase">About Me</p>
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
@@ -38,18 +25,18 @@ export default function About() {
             </h2>
             <div className="space-y-4 text-text-secondary text-lg leading-relaxed">
               <p>
-                I&apos;m a Senior Software Engineer passionate about creating high-performance 
-                front-end systems for enterprise SaaS applications. With expertise spanning 
-                modern frameworks like <span className="text-accent">React</span>, <span className="text-accent">Next.js</span>, and <span className="text-accent">Vue</span>, 
+                I&apos;m a Senior Software Engineer passionate about creating high-performance
+                front-end systems for enterprise SaaS applications. With expertise spanning
+                modern frameworks like <span className="text-accent">React</span>, <span className="text-accent">Next.js</span>, and <span className="text-accent">Vue</span>,
                 I build scalable, modular architectures that drive business impact.
               </p>
               <p>
-                My recent focus has been on integrating <span className="text-secondary">LLMs and AI-driven workflows</span> directly 
-                into production UIs, leveraging OpenAI APIs, LangChain, embeddings, and RAG 
+                My recent focus has been on integrating <span className="text-secondary">LLMs and AI-driven workflows</span> directly
+                into production UIs, leveraging OpenAI APIs, LangChain, embeddings, and RAG
                 to create intelligent, conversational experiences.
               </p>
               <p>
-                I believe in accessible design (WCAG 2.1), rigorous testing, and mentoring teams 
+                I believe in accessible design (WCAG 2.1), rigorous testing, and mentoring teams
                 to elevate code quality and developer experience across the board.
               </p>
             </div>
@@ -89,8 +76,7 @@ export default function About() {
           </div>
 
           {/* Right: Stats Cards */}
-          <div 
-            ref={statsRef as React.RefObject<HTMLDivElement>}
+          <div
             className="grid grid-cols-2 gap-4"
           >
             {highlights.map((stat, index) => (
@@ -98,12 +84,7 @@ export default function About() {
                 key={stat.label}
                 className={`p-6 bg-slate-dark/50 rounded-2xl border border-slate-medium hover:border-accent/50 transition-all card-hover group ${
                   index === 0 ? "col-span-2 sm:col-span-1" : ""
-                } ${statsVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"}`}
-                style={{ 
-                  transitionDelay: statsVisible ? `${index * 100}ms` : "0ms",
-                  transitionDuration: "600ms",
-                  transitionTimingFunction: "ease-out"
-                }}
+                } `}
               >
                 <div className="text-4xl md:text-5xl font-bold text-gradient mb-2">
                   {stat.number}
@@ -114,20 +95,14 @@ export default function About() {
               </div>
             ))}
             {/* Tech Stack Preview */}
-            <div 
-              className={`col-span-2 p-6 bg-gradient-to-br from-accent/10 to-secondary/10 rounded-2xl border border-accent/20 transition-all duration-600 ${
-                statsVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-              }`}
-              style={{ transitionDelay: statsVisible ? "400ms" : "0ms" }}
+            <div
+              className="col-span-2 p-6 bg-gradient-to-br from-accent/10 to-secondary/10 rounded-2xl border border-accent/20 transition-all duration-600"
             >
               <div className="flex flex-wrap gap-2">
-                {["React", "Next.js", "TypeScript", "LangChain", "OpenAI", "Node.js"].map((tech, i) => (
+                {["React", "Next.js", "TypeScript", "LangChain", "OpenAI", "Node.js"].map((tech) => (
                   <span
                     key={tech}
-                    className={`px-3 py-1 bg-midnight/50 rounded-full text-sm text-text-secondary border border-slate-medium hover:border-accent hover:text-accent transition-all duration-300 ${
-                      statsVisible ? "opacity-100 scale-100" : "opacity-0 scale-90"
-                    }`}
-                    style={{ transitionDelay: statsVisible ? `${500 + i * 50}ms` : "0ms" }}
+                    className="px-3 py-1 bg-midnight/50 rounded-full text-sm text-text-secondary border border-slate-medium hover:border-accent hover:text-accent transition-all duration-300"
                   >
                     {tech}
                   </span>
