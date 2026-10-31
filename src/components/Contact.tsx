@@ -1,3 +1,12 @@
 export default function Contact() {
-  return <section id="contact" className="section-space contact-section"><div className="shell contact-grid"><div><p className="section-label">05 / What’s next</p><h2 className="section-title">Let’s build<br />something that lasts.</h2><p>I’m exploring staff and lead engineering opportunities where architecture, product thinking, and hands-on delivery come together.</p><a className="contact-email" href="mailto:yashwanth.vandanapu@gmail.com">yashwanth.vandanapu@gmail.com <span aria-hidden="true">↗</span></a><div className="contact-social"><a href="https://linkedin.com/in/Yashwanth-Vandanapu" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a href="https://github.com/yashwanth1796" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div></div><aside className="resume-card"><span className="section-label">THE DETAILS, IN TWO PAGES</span><h3>Take a closer look.</h3><p>Two perspectives on my experience, tailored to the work your team needs.</p><a href="/Resume - Frontend.pdf" download>Front-end & technical leadership <span aria-hidden="true">↓</span></a><a href="/Resume - FullStack.pdf" download>Full-stack & platform architecture <span aria-hidden="true">↓</span></a></aside></div></section>;
+  return (
+    <section id="contact" className="section-space contact-section">
+      <h2 className="section-title">Have something in mind?</h2>
+      <a className="contact-email" href="mailto:yashwanth.vandanapu@gmail.com">Email me <span aria-hidden="true">↗</span></a>
+      <div className="contact-social"><a href="https://linkedin.com/in/Yashwanth-Vandanapu" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a href="https://github.com/yashwanth1796" target="_blank" rel="noopener noreferrer">GitHub ↗</a></div>
+      <details className="additional-work"><summary>Download my resume <span aria-hidden="true">+</span></summary>
+        <div className="resume-options"><a className="text-link" href="/Resume - Frontend.pdf" download>Front-end ↓</a><a className="text-link" href="/Resume - FullStack.pdf" download>Full-stack ↓</a></div>
+      </details>
+    </section>
+  );
 }

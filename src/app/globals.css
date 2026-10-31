@@ -189,7 +189,9 @@
   .contact-email { font-size: 14px; }
 }
 /* Small, CSS-driven responses keep interaction off the rendering hot path. */
-.intro { position: relative; }
+.intro { position: relative; padding-bottom: 48px; }
+.work-result { color: #2459db; font-size: 13px; font-weight: 600; }
+.resume-options { display: flex; flex-wrap: wrap; gap: 24px; padding-top: 16px; }
 .intro::before { content: ""; display: block; width: 48px; height: 3px; background: #2459db; margin-bottom: 24px; border-radius: 2px; }
 .intro-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 24px; margin-top: 26px; }
 .intro-primary { display: inline-flex; align-items: center; gap: 32px; padding: 13px 18px; border: 1px solid #2459db; border-radius: 6px; background: #2459db; color: white; font-size: 12px; font-weight: 600; }

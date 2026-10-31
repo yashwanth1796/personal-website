@@ -79,7 +79,7 @@ These postings inform emphasis only; their requirements are not treated as evide
 
 ## Design direction
 
-The portfolio uses a persistent desktop profile rail with a single reading column. Mobile moves the profile and native anchor navigation above the content. Three employer-attributed case studies show technical scope, personal contribution, and outcomes from the existing resumes. Additional projects and detailed contributions use native HTML disclosures. System fonts, server components, and CSS layout preserve the lightweight initial load.
+The portfolio uses a persistent desktop profile rail with a single reading column. Mobile moves the profile and native anchor navigation above the content. Three employer-attributed project cards each show a short description and an outcome from the existing resumes. Technical details and earlier roles use native HTML disclosures. The homepage keeps the introduction, career history, and contact section brief; the resumes carry the full background. System fonts, server components, and CSS layout preserve the lightweight initial load.
 
 References researched for the October 2026 redesign:
 - [Brittany Chiang](https://brittanychiang.com/): persistent identity, experience hierarchy, and readable project evidence.
