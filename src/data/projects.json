@@ -1,0 +1,141 @@
+[
+  {
+    "title": "Survey authoring & shared UI foundations",
+    "category": "Enterprise SaaS \u2022 AI/LLM",
+    "description": "Built reusable React and Next.js modules in an Nx monorepo for enterprise survey authoring, with AI assistance for content generation, routing, and validation.",
+    "highlights": [
+      "Reusable React and Next.js components reduced code redundancy by 30%.",
+      "OpenAI Assistants API integration for intelligent routing",
+      "LangChain agents for automated metadata extraction",
+      "Streaming UI responses with dynamic multi-step workflows",
+      "Schema-driven form generation with intelligent assistance"
+    ],
+    "tech": [
+      "React",
+      "Next.js",
+      "NX",
+      "OpenAI",
+      "LangChain",
+      "TypeScript"
+    ],
+    "company": "SurveyMonkey",
+    "focus": "Modular architecture / Reusable components / Accessible workflows",
+    "outcome": "30% less code redundancy",
+    "scope": [
+      "React + Next.js",
+      "Nx monorepo",
+      "Shared UI + CI/CD"
+    ]
+  },
+  {
+    "title": "Conversational Bot UI Framework",
+    "category": "AI/LLM \u2022 React Components",
+    "description": "Developed reusable conversational and bot-driven UI components supporting streaming responses, tool calls, fallback chains, and dynamic multi-step workflows for enterprise applications.",
+    "highlights": [
+      "Real-time streaming response handling",
+      "Function calling and tool integration",
+      "Fallback chain management",
+      "Accessible WCAG 2.1 compliant interface"
+    ],
+    "tech": [
+      "React",
+      "TypeScript",
+      "OpenAI",
+      "Streaming API",
+      "Storybook"
+    ],
+    "company": "SurveyMonkey"
+  },
+  {
+    "title": "Financial Workflow Automation",
+    "category": "FinTech \u2022 Workflow",
+    "description": "Modernized RRSP and TFSA workflows in Vue 3 using composable APIs and Pinia, with schema-driven forms, validation, and reliable form session recovery.",
+    "highlights": [
+      "Vue 3 migration for investment and retirement workflows",
+      "Jest/Karma testing frameworks",
+      "Node.js and REST API integrations",
+      "SQL and NoSQL-backed form data and caching"
+    ],
+    "tech": [
+      "Vue 3",
+      "Pinia",
+      "Node.js",
+      "Jest",
+      "REST APIs",
+      "PostgreSQL",
+      "MongoDB"
+    ],
+    "company": "Canada Life Digital Hub",
+    "focus": "Vue 3 migration / Form reliability / Automated testing",
+    "outcome": "40% fewer defects with Jest/Karma",
+    "scope": [
+      "Vue 3 + Pinia",
+      "Forms + validation",
+      "APIs + data recovery"
+    ]
+  },
+  {
+    "title": "Enterprise Dashboard Rebuild",
+    "category": "Banking \u2022 React",
+    "description": "Rebuilt enterprise banking dashboards in React and Redux, with multi-step approval flows, API integrations, and PostgreSQL-backed report caching.",
+    "highlights": [
+      "25% improvement in workflow efficiency",
+      "Structured unit and integration testing",
+      "PostgreSQL report caching",
+      "Redux state management for approval workflows"
+    ],
+    "tech": [
+      "React",
+      "Redux",
+      "PostgreSQL",
+      "REST APIs"
+    ],
+    "company": "CITI Bank",
+    "focus": "State management / Approval workflows / Report caching",
+    "outcome": "25% improvement in workflow efficiency",
+    "scope": [
+      "React + Redux",
+      "Approval workflows",
+      "PostgreSQL caching"
+    ]
+  },
+  {
+    "title": "Micro-Frontend Architecture",
+    "category": "Telecom \u2022 Full Stack",
+    "description": "Designed and implemented micro-frontend React/Next.js modules for internal provisioning workflows and customer management systems with IaC using Terraform and Ansible.",
+    "highlights": [
+      "Module federation for scalable architecture",
+      "Real-time operations dashboards",
+      "Infrastructure as Code implementation",
+      "Mobile-optimized responsive design"
+    ],
+    "tech": [
+      "React",
+      "Next.js",
+      "Node.js",
+      "MongoDB",
+      "Terraform",
+      "Ansible"
+    ],
+    "company": "Telus"
+  },
+  {
+    "title": "Healthcare Workflow Platform",
+    "category": "Healthcare \u2022 Enterprise",
+    "description": "Developed healthcare workflow modules with form-heavy UI flows, high-performance AWS deployments, and comprehensive accessibility compliance for global healthcare providers.",
+    "highlights": [
+      "Complex multi-step form workflows",
+      "High-availability AWS infrastructure",
+      "WCAG accessibility compliance",
+      "Agile development practices"
+    ],
+    "tech": [
+      "Vue",
+      "Angular",
+      "AWS EC2",
+      "Nginx",
+      "Node.js"
+    ],
+    "company": "Kellton Tech Solutions"
+  }
+]

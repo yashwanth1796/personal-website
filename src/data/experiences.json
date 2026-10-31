@@ -1,0 +1,152 @@
+[
+  {
+    "company": "SurveyMonkey",
+    "role": "Senior Software Engineer",
+    "location": "Canada",
+    "period": "October 2023 \u2013 Present",
+    "description": "Front-end architecture, shared components, and AI-assisted workflows for enterprise SaaS.",
+    "highlights": [
+      "Led modular front-end architecture for enterprise SaaS applications using React, Next.js, TypeScript, and an Nx monorepo.",
+      "Architected reusable React and Next.js components, reducing code redundancy by 30%.",
+      "Delivered WCAG 2.1-compliant interfaces with rigorous accessibility testing and front-end performance optimization.",
+      "Designed Nx monorepo CI/CD pipelines in GitHub Actions for builds, tests, linting, and releases across web apps and npm packages.",
+      "Integrated OpenAI APIs and LangChain into survey workflows, with streaming UI responses, tool calls, and schema-driven forms.",
+      "Built Node.js and Python APIs, GraphQL queries, and PostgreSQL/MongoDB integrations; partnered with platform teams on Terraform and AWS deployments.",
+      "Mentored engineers on React architecture, Redux state management, design patterns, and AI integration."
+    ],
+    "tech": [
+      "React",
+      "Next.js",
+      "TypeScript",
+      "Nx",
+      "Node.js",
+      "Python",
+      "OpenAI",
+      "LangChain",
+      "AWS"
+    ],
+    "current": true
+  },
+  {
+    "company": "Canada Life Digital Hub",
+    "role": "Application Developer",
+    "location": "Canada",
+    "period": "March 2023 \u2013 September 2023",
+    "description": "Modernized investment and retirement workflows with Vue 3, reliable forms, and API integrations.",
+    "highlights": [
+      "Led RRSP and TFSA workflow migration to Vue 3 using composable APIs and Pinia.",
+      "Established Jest/Karma testing frameworks, cutting defects by 40%.",
+      "Developed schema-driven forms and validation for investment and retirement workflows, collaborating with cross-functional teams on product goals.",
+      "Built Node.js APIs and REST integrations; used SQL queries and NoSQL caching to support form data and session recovery."
+    ],
+    "tech": [
+      "Vue 3",
+      "Pinia",
+      "Node.js",
+      "Jest",
+      "REST APIs",
+      "PostgreSQL",
+      "MongoDB"
+    ],
+    "current": false
+  },
+  {
+    "company": "CITI Bank",
+    "role": "Senior Software Engineer",
+    "location": "Canada",
+    "period": "August 2022 \u2013 March 2023",
+    "description": "Rebuilt banking dashboards and approval workflows with React and Redux.",
+    "highlights": [
+      "Rebuilt enterprise dashboards and multi-step approval flows in React and Redux, improving efficiency by 25%.",
+      "Reduced bugs through structured unit and integration testing.",
+      "Integrated backend APIs into reusable front-end components and built a PostgreSQL report caching layer."
+    ],
+    "tech": [
+      "React",
+      "Redux",
+      "PostgreSQL",
+      "REST APIs"
+    ],
+    "current": false
+  },
+  {
+    "company": "Telus",
+    "role": "Frontend/Full Stack Developer",
+    "location": "Canada",
+    "period": "May 2021 \u2013 August 2022",
+    "description": "Built micro-frontend architecture for internal provisioning workflows.",
+    "highlights": [
+      "Built micro-frontend React/Next.js modules for internal provisioning workflows.",
+      "Developed Node.js/MongoDB services for automation tooling and real-time dashboards.",
+      "Implemented IaC using Terraform and Ansible for environment provisioning.",
+      "Delivered mobile-optimized, accessible interfaces."
+    ],
+    "tech": [
+      "React",
+      "Next.js",
+      "Node.js",
+      "MongoDB",
+      "Terraform",
+      "Ansible"
+    ],
+    "current": false
+  },
+  {
+    "company": "FactSet",
+    "role": "Software Engineer II",
+    "location": "India",
+    "period": "November 2020 \u2013 May 2021",
+    "description": "Modernized legacy applications with improved workflow navigation.",
+    "highlights": [
+      "Modernized UI from AngularJS to Vue/Angular hybrids with improved navigation.",
+      "Automated environment configuration with Ansible and AWS EC2 deployment pipelines.",
+      "Improved accessibility and performance across global financial products."
+    ],
+    "tech": [
+      "Vue",
+      "Angular",
+      "Ansible",
+      "AWS EC2"
+    ],
+    "current": false
+  },
+  {
+    "company": "Hughes Systique",
+    "role": "Software Engineer",
+    "location": "India",
+    "period": "June 2019 \u2013 November 2020",
+    "description": "Delivered high-traffic applications with CI/CD integration.",
+    "highlights": [
+      "Delivered React/Angular interfaces for workflow visualization and automation.",
+      "Built backend APIs using Node.js and Loopback, integrating MongoDB for analytics.",
+      "Improved cross-browser performance using Bootstrap and Angular Material."
+    ],
+    "tech": [
+      "React",
+      "Angular",
+      "Node.js",
+      "Loopback",
+      "MongoDB"
+    ],
+    "current": false
+  },
+  {
+    "company": "Kellton Tech Solutions",
+    "role": "Software Engineer",
+    "location": "India",
+    "period": "February 2017 \u2013 June 2019",
+    "description": "Developed enterprise healthcare solutions with Vue/Angular.",
+    "highlights": [
+      "Developed healthcare workflow modules using Vue/Angular with form-heavy UI flows.",
+      "Managed AWS EC2 deployments with Nginx tuning for high-performance delivery.",
+      "Collaborated in Agile processes including sprints and retrospectives."
+    ],
+    "tech": [
+      "Vue",
+      "Angular",
+      "AWS EC2",
+      "Nginx"
+    ],
+    "current": false
+  }
+]

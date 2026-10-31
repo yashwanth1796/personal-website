@@ -4,8 +4,8 @@
   "description": "Senior Software Engineer specializing in React, Next.js, and AI/LLM integrations",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f7f4ed",
-  "theme_color": "#f7f4ed",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
   "orientation": "portrait-primary",
   "icons": [
     {

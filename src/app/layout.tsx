@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     template: "%s | Yashwanth Kumar Vandanapu",
   },
   description:
-    "Senior Software Engineer with 7+ years of experience building enterprise-scale React applications, AI/LLM integrations, and accessible web platforms. Expert in Next.js, TypeScript, and workflow automation.",
+    "Senior Software Engineer with 10 years of experience building enterprise-scale React applications, AI/LLM integrations, and accessible web platforms. Expert in Next.js, TypeScript, and workflow automation.",
   keywords: [
     "Yashwanth Kumar Vandanapu",
     "Senior Software Engineer",
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
     siteName: "Yashwanth Kumar Vandanapu",
     title: "Yashwanth Kumar Vandanapu | Senior Software Engineer",
     description:
-      "Senior Software Engineer specializing in React, Next.js, AI/LLM integrations, and enterprise-scale platforms. 7+ years of experience building accessible, high-performance web applications.",
+      "Senior Software Engineer specializing in React, Next.js, AI/LLM integrations, and enterprise-scale platforms. 10 years of experience building accessible, high-performance web applications.",
     images: [
       {
         url: "/opengraph-image",
@@ -159,7 +159,7 @@ export default function RootLayout({
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#f7f4ed" />
+        <meta name="theme-color" content="#ffffff" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}

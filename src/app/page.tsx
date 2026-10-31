@@ -9,15 +9,17 @@ import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
-    <main id="main-content" tabIndex={-1} className="min-h-screen bg-midnight">
+    <div className="portfolio-layout">
       <Header />
-      <Hero />
-      <About />
-      <Skills />
-      <Experience />
-      <Projects />
-      <Contact />
-      <Footer />
-    </main>
+      <main id="main-content" tabIndex={-1}>
+        <Hero />
+        <Projects />
+        <Experience />
+        <About />
+        <Skills />
+        <Contact />
+        <Footer />
+      </main>
+    </div>
   );
 }
