@@ -14,7 +14,6 @@ export default function Header() {
       <h1>Yashwanth <br />Kumar <br /><span>Vandanapu.</span></h1>
       <p className="profile-role">Senior Software Engineer</p>
       <p className="profile-summary">Front-end depth.<br />Full-stack perspective.<br />10 years of building what’s next.</p>
-      <div className="profile-status"><span aria-hidden="true" /> Open to staff / lead roles</div>
       <nav aria-label="Main navigation" className="profile-navigation"><ol>{links.map((link, i) => <li key={link.href}><a href={link.href}><span>0{i + 1}</span>{link.label}<span aria-hidden="true">↗</span></a></li>)}</ol></nav>
       <div className="profile-bottom"><a className="profile-resume" href="/Resume - Frontend.pdf" download>Download resume <span aria-hidden="true">↓</span></a><div className="profile-social"><a href="https://github.com/yashwanth1796" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="https://linkedin.com/in/Yashwanth-Vandanapu" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a href="/blog">Writing ↗</a></div><p>Based in Toronto, Canada</p></div>
     </header>
