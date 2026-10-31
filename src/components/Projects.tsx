@@ -8,7 +8,7 @@ export default function Projects() {
       <div className="shell">
         <div className="section-heading"><div><p className="section-label">01 / Selected work</p><h2 className="section-title">From architecture to impact.</h2></div><span className="section-aside">THREE SELECTED ENGAGEMENTS</span></div>
         <div className="work-grid">{featured.map((project, index) => (
-          <article className="work-card" key={project.title}>
+          <article className="work-card" id={`work-${project.company.toLowerCase().replaceAll(" ", "-")}`} key={project.title}>
             <div className="work-card-top"><span>{project.company}</span><span>0{index + 1}</span></div>
             <h3>{project.title}</h3><p className="work-description">{project.description}</p>
             <div className="project-scope" aria-label="Technical scope">{project.scope?.map((item, i) => <span key={item}><small>0{i + 1}</small>{item}</span>)}</div>

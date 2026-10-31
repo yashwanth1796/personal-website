@@ -49,7 +49,7 @@ npm audit --omit=dev
 
 Regression tests cover blog pagination, nested content, failure behavior, safe JSON-LD and RSS serialization, list markup, URL handling, and reading time. Deploy to a host supporting Next.js server rendering and route handlers, such as Vercel, with the same environment variables. The Notion blog, RSS handler, and generated social images require a Next.js runtime; the app is not configured for static export.
 
-The homepage uses server components, native HTML disclosures, and system fonts. No font downloads or application client components are required for the homepage.
+The homepage uses server components, native HTML disclosures, and system fonts. No font downloads or animation libraries are required. A small client component tracks the visible section with IntersectionObserver; navigation and disclosures still work without JavaScript.
 
 ## Customization
 
