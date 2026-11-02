@@ -14,17 +14,22 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, KeepTogethe
 
 ROOT = Path(__file__).resolve().parents[1]
 EXPERIENCES = json.loads((ROOT / 'src/data/experiences.json').read_text())
-MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+
+def parse_start(period):
+    """Mirrors parseStart() in src/lib/transit.ts: a missing or unknown month counts as December."""
+    import re
+    head = re.split(r'\s*[\u2013-]\s*', period)[0]
+    year = int(re.search(r'\d{4}', head).group())
+    word = re.search(r'[A-Za-z]+', head)
+    key = word.group()[:3].lower() if word else ''
+    return year, MONTHS.index(key) if key in MONTHS else 11
 
 def years_of_experience(today=None):
     """Whole years since the earliest role started; matches yearsOfExperience() in src/lib/transit.ts."""
-    import datetime, re
+    import datetime
     today = today or datetime.date.today()
-    starts = []
-    for exp in EXPERIENCES:
-        month, year = re.split(r'\s*[\u2013-]\s*', exp['period'])[0].split()
-        starts.append((int(year), MONTHS.index(month)))
-    year, month = min(starts)
+    year, month = min(parse_start(exp['period']) for exp in EXPERIENCES)
     return ((today.year - year) * 12 + (today.month - 1 - month)) // 12
 
 YEARS = f'{years_of_experience()}+ years'

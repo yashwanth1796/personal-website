@@ -228,6 +228,7 @@
   .metro-map.is-live > g, .hint { opacity: 1; }
   .is-live .lane-line { stroke-dasharray: none; stroke-dashoffset: 0; }
   .is-live .lane-next { opacity: .8; }
+  .is-live .lane-skip { opacity: .55; }
 }
 
 /* View toggle */

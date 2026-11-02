@@ -28,7 +28,17 @@ for (const orientation of ["horizontal", "vertical"] as const) {
   });
 }
 
-test("lanes that no role uses are skipped instead of crashing the layout", () => {
-  const map = layout("horizontal");
-  for (const lane of map.lanes) assert.ok(stations.some(s => s.lanes.includes(lane.id)), lane.id);
+
+test("a lane no role uses is dropped rather than crashing (guard is exercised)", async () => {
+  const { lanes } = await import("../src/lib/transit");
+  const unused = { id: "unused" as unknown as (typeof lanes)[number]["id"], label: "Unused", color: "#000", members: ["NoSuchTech"] };
+  const map = layout("horizontal", [...lanes, unused]);
+  assert.equal(map.lanes.length, lanes.length, "the unused lane produces no paths");
+});
+
+test("period parsing handles month names, abbreviations and year-only values", async () => {
+  const { parseStart } = await import("../src/lib/transit");
+  assert.deepEqual([parseStart("February 2017 – June 2019").getFullYear(), parseStart("February 2017 – June 2019").getMonth()], [2017, 1]);
+  assert.equal(parseStart("Sept 2016 – May 2017").getMonth(), 8);
+  assert.equal(parseStart("2016 – 2017").getMonth(), 11, "year-only never overstates");
 });

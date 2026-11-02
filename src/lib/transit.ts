@@ -73,8 +73,20 @@ export type Station = {
   outcome?: string;
   current: boolean;
   employment?: string;
+  /** First month of the role, parsed once from `period`. */
+  start: Date;
   projects: Project[];
 };
+
+const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+/** Parses "February 2017", "Sept 2016" or "2016". A missing or unknown month counts as December (never overstates). */
+export function parseStart(period: string): Date {
+  const head = period.split(/\s*[–-]\s*/)[0];
+  const year = Number(head.match(/\d{4}/)?.[0]);
+  const word = head.match(/[A-Za-z]+/)?.[0]?.slice(0, 3).toLowerCase();
+  const month = word ? MONTHS.indexOf(word) : -1;
+  return new Date(year, month >= 0 ? month : 11, 1);
+}
 
 export const stations: Station[] = [...experiences].reverse().map(role => {
   const [start, end] = role.period.split(/\s*–\s*/);
@@ -94,6 +106,7 @@ export const stations: Station[] = [...experiences].reverse().map(role => {
     outcome: outcomes.get(role.company),
     current: role.current,
     employment: (role as { employment?: string }).employment,
+    start: parseStart(role.period),
     projects: projectList.filter(p => p.company === role.company),
   };
 });
@@ -105,15 +118,10 @@ const allSide = personal as SideProject[];
 export const sideProjects: SideProject[] = allSide.filter(p => !p.minor);
 export const minorSideProjects: SideProject[] = allSide.filter(p => p.minor);
 
-const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-const startOf = (period: string) => {
-  const [month, year] = period.split(/\s*[–-]\s*/)[0].trim().split(/\s+/);
-  return new Date(Number(year), Math.max(0, MONTHS.indexOf(month)), 1);
-};
-
 /** Whole years since the earliest role started, e.g. 9 for Feb 2017 → Nov 2026. */
 export function yearsOfExperience(now = new Date()) {
-  const first = Math.min(...stations.map(s => startOf(s.period).getTime()));
+  const first = Math.min(...stations.map(s => s.start.getTime()));
+  if (!Number.isFinite(first)) return 0;
   const d = new Date(first);
   const months = (now.getFullYear() - d.getFullYear()) * 12 + (now.getMonth() - d.getMonth());
   return Math.floor(months / 12);
@@ -126,7 +134,7 @@ export const SPAN = lanes.length * LANE_GAP;
 
 type Pt = [number, number];
 
-export function layout(orientation: Orientation) {
+export function layout(orientation: Orientation, laneDefs: typeof lanes = lanes) {
   const h = orientation === "horizontal";
   const gap = h ? 200 : 172;
   const start = h ? 150 : 150;
@@ -137,7 +145,7 @@ export function layout(orientation: Orientation) {
   const last = stationPts[stationPts.length - 1];
   const terminus = { m: last.m + gap * 0.85, c: last.c };
 
-  const laneOffset = (index: number) => (index - (lanes.length - 1) / 2) * LANE_GAP;
+  const laneOffset = (index: number) => (index - (laneDefs.length - 1) / 2) * LANE_GAP;
 
   function route(points: Pt[]) {
     const out: Pt[] = [points[0]];
@@ -154,7 +162,7 @@ export function layout(orientation: Orientation) {
     return out.map(toXY).map(([x, y], i) => `${i ? "L" : "M"}${x.toFixed(1)} ${y.toFixed(1)}`).join(" ");
   }
 
-  const lanePaths = lanes.flatMap((lane, li) => {
+  const lanePaths = laneDefs.flatMap((lane, li) => {
     const served = stations.map((s, i) => (s.lanes.includes(lane.id) ? i : -1)).filter(i => i >= 0);
     if (!served.length) return [];
     const off = laneOffset(li);
@@ -169,7 +177,11 @@ export function layout(orientation: Orientation) {
     const solid: string[] = [];
     const skipped: string[] = [];
     let run: number[] = [first];
-    const close = () => solid.push(run.length > 1 ? route(run.map(at)) : stub(run[0]));
+    let train = { index: 0, size: 0 };
+    const close = () => {
+      if (run.length > train.size) train = { index: solid.length, size: run.length };
+      solid.push(run.length > 1 ? route(run.map(at)) : stub(run[0]));
+    };
     for (let k = 1; k < served.length; k++) {
       const a = served[k - 1], b = served[k];
       if (b === a + 1) run.push(b);
@@ -183,7 +195,8 @@ export function layout(orientation: Orientation) {
     const live = lastServed === stations.length - 1;
     return [{
       ...lane,
-      d: first === lastServed ? stub(first) : route(span(first, lastServed)),
+      /** Trains ride the longest solid stretch, never a dotted one. */
+      train: train.index,
       solid,
       skipped,
       next: live ? route([[last.m, last.c + off], [terminus.m, terminus.c + off]]) : null,

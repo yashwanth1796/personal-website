@@ -5,11 +5,13 @@ import { Overpass } from "next/font/google";
 import "./globals.css";
 
 const siteUrl = "https://yashwanth-vandanapu.dev";
-const years = `${yearsOfExperience()}+ years`;
 
 const overpass = Overpass({ subsets: ["latin"], variable: "--font-overpass", display: "swap" });
 
-export const metadata: Metadata = {
+// Built per request so the years of experience never go stale between deploys.
+export function generateMetadata(): Metadata {
+  const years = `${yearsOfExperience()}+ years`;
+  return {
   metadataBase: new URL(siteUrl),
   title: {
     default: "Yashwanth Kumar Vandanapu | Senior Software Engineer",
@@ -86,7 +88,8 @@ export const metadata: Metadata = {
     // google: "your-google-verification-code",
     // yandex: "your-yandex-verification-code",
   },
-};
+  };
+}
 
 // JSON-LD Structured Data
 const jsonLd = {
