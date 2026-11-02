@@ -49,7 +49,7 @@ npm audit --omit=dev
 
 Regression tests cover blog pagination, nested content, failure behavior, safe JSON-LD and RSS serialization, list markup, URL handling, and reading time. Deploy to a host supporting Next.js server rendering and route handlers, such as Vercel, with the same environment variables. The Notion blog, RSS handler, and generated social images require a Next.js runtime; the app is not configured for static export.
 
-The homepage uses server components, native HTML disclosures, and system fonts. No font downloads or animation libraries are required. A small client component tracks the visible section with IntersectionObserver; navigation and disclosures still work without JavaScript.
+The homepage has two views that share one data source. **Map** (default) is an interactive SVG transit map, with technologies as lines, roles as stations, projects as branch stops and side projects on their own line. It supports pan, pinch zoom, inertia and keyboard navigation, and respects reduced motion. **List** (`?view=list`, remembered per visitor) is a scannable page with the same content. Overpass is self-hosted through `next/font`; no animation libraries are used. Without JavaScript, the List view renders.
 
 ## Customization
 
@@ -79,7 +79,7 @@ These postings inform emphasis only; their requirements are not treated as evide
 
 ## Design direction
 
-The portfolio uses a persistent desktop profile rail with a single reading column. Mobile moves the profile and native anchor navigation above the content. Three employer-attributed project cards each show a short description and an outcome from the existing resumes. Technical details and earlier roles use native HTML disclosures. The homepage keeps the introduction, career history, and contact section brief; the resumes carry the full background. System fonts, server components, and CSS layout preserve the lightweight initial load.
+The November 2026 redesign presents the career as a transit map (see `DESIGN.md` for tokens and rules, and `PRODUCT.md` for audience and positioning). Career data lives in `src/data/` (`experiences.json`, `projects.json`, `personal.json`); `src/lib/transit.ts` derives the map layout, and the resumes are generated from the same experience data by `scripts/build_resumes.py`. Project screenshots in `public/projects/` are redacted copies; raw captures stay in the git-ignored `.impeccable/` folder.
 
 References researched for the October 2026 redesign:
 - [Brittany Chiang](https://brittanychiang.com/): persistent identity, experience hierarchy, and readable project evidence.

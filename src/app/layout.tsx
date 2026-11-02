@@ -1,17 +1,24 @@
 import { serializeJsonLd } from "@/lib/serialization";
+import { yearsOfExperience } from "@/lib/transit";
 import type { Metadata } from "next";
+import { Overpass } from "next/font/google";
 import "./globals.css";
 
 const siteUrl = "https://yashwanth-vandanapu.dev";
 
-export const metadata: Metadata = {
+const overpass = Overpass({ subsets: ["latin"], variable: "--font-overpass", display: "swap" });
+
+// Built per request so the years of experience never go stale between deploys.
+export function generateMetadata(): Metadata {
+  const years = `${yearsOfExperience()}+ years`;
+  return {
   metadataBase: new URL(siteUrl),
   title: {
     default: "Yashwanth Kumar Vandanapu | Senior Software Engineer",
     template: "%s | Yashwanth Kumar Vandanapu",
   },
   description:
-    "Senior Software Engineer with 10 years of experience building enterprise-scale React applications, AI/LLM integrations, and accessible web platforms. Expert in Next.js, TypeScript, and workflow automation.",
+    `Senior Software Engineer with ${years} of experience building enterprise-scale React applications, AI/LLM integrations, and accessible (WCAG 2.2 AA) web platforms. Expert in Next.js and TypeScript, working AI-first with Claude Code, Codex, Cursor, and GitHub Copilot.`,
   keywords: [
     "Yashwanth Kumar Vandanapu",
     "Senior Software Engineer",
@@ -25,7 +32,8 @@ export const metadata: Metadata = {
     "LangChain Developer",
     "Enterprise Applications",
     "Web Accessibility",
-    "WCAG Compliance",
+    "WCAG 2.2",
+    "AI-assisted development",
     "Toronto Developer",
     "Canada Software Engineer",
   ],
@@ -50,7 +58,7 @@ export const metadata: Metadata = {
     siteName: "Yashwanth Kumar Vandanapu",
     title: "Yashwanth Kumar Vandanapu | Senior Software Engineer",
     description:
-      "Senior Software Engineer specializing in React, Next.js, AI/LLM integrations, and enterprise-scale platforms. 10 years of experience building accessible, high-performance web applications.",
+      `Senior Software Engineer specializing in React, Next.js, AI/LLM integrations, and enterprise-scale platforms. ${years} of experience building accessible, high-performance web applications.`,
     images: [
       {
         url: "/opengraph-image",
@@ -80,7 +88,8 @@ export const metadata: Metadata = {
     // google: "your-google-verification-code",
     // yandex: "your-yandex-verification-code",
   },
-};
+  };
+}
 
 // JSON-LD Structured Data
 const jsonLd = {
@@ -115,6 +124,8 @@ const jsonLd = {
         "AI/LLM Integration",
         "LangChain",
         "Web Accessibility",
+        "WCAG 2.2",
+        "AI-assisted development",
         "Enterprise Software Development",
         "Frontend Development",
         "Full Stack Development",
@@ -153,13 +164,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={overpass.variable} suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" href="/icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#ffffff" />
+        <meta name="theme-color" content="#f4f4f1" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: serializeJsonLd(jsonLd) }}

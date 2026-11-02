@@ -1,0 +1,242 @@
+[
+  {
+    "id": "file-uploader",
+    "title": "Drag-and-drop file uploader",
+    "short": "File uploader",
+    "years": "2019",
+    "description": "An Angular directive that turns any element into a drag-and-drop file upload zone.",
+    "highlights": [
+      "Reusable directive with drag-over, drag-leave and drop states",
+      "Emits dropped files to the host component, with an attachment list and delete",
+      "Built with Angular host bindings and listeners"
+    ],
+    "tech": [
+      "Angular",
+      "TypeScript"
+    ],
+    "link": "https://github.com/yashwanth1796/draganddrop",
+    "linkLabel": "View on GitHub",
+    "minor": true,
+    "ai": false
+  },
+  {
+    "id": "geodistance-cal",
+    "title": "geodistance-cal",
+    "short": "geodistance-cal",
+    "years": "2020",
+    "description": "An npm package that calculates the distance between two latitude/longitude points.",
+    "highlights": [
+      "Published on npm as geodistance-cal, now at version 1.1.2",
+      "Uses the Haversine formula and returns the distance in kilometres",
+      "One function call, no dependencies, and validates its input points"
+    ],
+    "tech": [
+      "JavaScript",
+      "npm"
+    ],
+    "link": "https://www.npmjs.com/package/geodistance-cal",
+    "linkLabel": "View on npm",
+    "ai": false,
+    "problem": "Apps that show “distance to” need a quick, accurate great-circle distance without pulling in a whole mapping SDK.",
+    "how": "Converts both points to radians and applies the Haversine formula on Earth’s radius, returning kilometres to two decimals. If either point is missing a lat or lng, it returns an error instead of a wrong number."
+  },
+  {
+    "id": "mortgage-calculator",
+    "title": "Mortgage calculator",
+    "short": "Mortgage calculator",
+    "years": "2022",
+    "description": "A React calculator that solves for whichever loan value you leave out.",
+    "highlights": [
+      "Finds the monthly payment, interest rate, loan amount or number of months from the other three",
+      "Form fields switch automatically based on what you're solving for",
+      "Input validation with clear-all reset"
+    ],
+    "tech": [
+      "React",
+      "JavaScript"
+    ],
+    "link": "https://github.com/yashwanth1796/mortgage-calculator",
+    "linkLabel": "View on GitHub",
+    "minor": true,
+    "ai": false
+  },
+  {
+    "id": "solar-connect",
+    "title": "India Solar Connect",
+    "short": "Solar Connect",
+    "years": "2025, prototype",
+    "description": "A rooftop-solar calculator and installer aggregator for Indian homeowners.",
+    "highlights": [
+      "Calculator sizes a system from the monthly bill and city sun hours, then estimates cost, state subsidy, yearly savings and payback",
+      "Installer directory with search and location filters, plus CSV import for adding installers in bulk",
+      "Subsidy and registered-vendor guides, prototyped rapidly with the Lovable AI app builder"
+    ],
+    "tech": [
+      "React",
+      "TypeScript",
+      "Vite",
+      "shadcn/ui",
+      "Lovable"
+    ],
+    "link": "",
+    "linkLabel": "",
+    "ai": false,
+    "problem": "Homeowners in India can’t easily tell what size rooftop system they need, what it costs after subsidy, or who installs nearby.",
+    "how": "Divides the monthly bill by the average tariff to get usage, then divides by the city’s sun hours to size the system (rounded to 0.5 kW). It prices the system per kW, subtracts the state subsidy, and compares yearly generation (at 80% efficiency) against the tariff and maintenance to show savings and payback."
+  },
+  {
+    "id": "clipsmart",
+    "title": "ClipSmart",
+    "short": "ClipSmart",
+    "years": "2025",
+    "description": "A native macOS menu-bar clipboard manager with searchable history.",
+    "highlights": [
+      "Monitors the clipboard in real time and keeps history across launches with Core Data",
+      "Detects clip types (text, URLs, email addresses, code snippets) and filters duplicates",
+      "Instant search, one-click copy back, and full keyboard navigation"
+    ],
+    "tech": [
+      "Swift",
+      "SwiftUI",
+      "Core Data"
+    ],
+    "link": "https://github.com/yashwanth1796/ClipSmart",
+    "linkLabel": "View on GitHub",
+    "ai": false,
+    "problem": "macOS remembers only the last thing you copied, so earlier copies are lost.",
+    "how": "A menu-bar app checks the clipboard every half second, skips duplicates, and classifies each clip as text, URL, email or code. It keeps the latest 25 in Core Data so history survives restarts. Clicking a clip copies it back."
+  },
+  {
+    "id": "jsonsmart",
+    "title": "JSONSmart",
+    "short": "JSONSmart",
+    "years": "2025",
+    "description": "A macOS JSON editor for formatting, validating, querying and comparing JSON.",
+    "highlights": [
+      "Format, validate and minify JSON with syntax highlighting",
+      "Interactive tree view and JSONPath queries for large documents",
+      "Side-by-side JSON diff and a built-in HTTP client for API responses"
+    ],
+    "tech": [
+      "Swift",
+      "SwiftUI"
+    ],
+    "link": "https://github.com/yashwanth1796/JSONSmart",
+    "linkLabel": "View on GitHub",
+    "ai": false,
+    "problem": "Working with JSON means bouncing between a browser formatter, a diff tool and an API client.",
+    "how": "One native SwiftUI app: a parser validates and formats, a tree view navigates large documents, a JSONPath evaluator runs queries, a diff view compares two documents, and a built-in HTTP client fetches JSON straight from an API."
+  },
+  {
+    "id": "wealthpilot",
+    "title": "WealthPilot",
+    "short": "WealthPilot",
+    "years": "2025, prototype",
+    "description": "A personal AI CFO for India that reads bank statements and invoices, and turns them into budgets and insights.",
+    "highlights": [
+      "GPT-4o with JSON-mode outputs extracts invoice data, categorizes transactions, and drafts budget plans and daily insights",
+      "OCR (Tesseract) and PDF parsing for uploaded statements, with a regex fallback that keeps parsing when the AI quota runs out",
+      "Captures transactions from SMS and email alerts through a webhook, with JWT auth and Firebase storage"
+    ],
+    "tech": [
+      "Python",
+      "Flask",
+      "OpenAI GPT-4o",
+      "Tesseract OCR",
+      "Firebase"
+    ],
+    "link": "",
+    "linkLabel": "",
+    "ai": true,
+    "problem": "In India, spending is scattered across bank statements, UPI SMS alerts and paper invoices, so there’s no single picture of where money goes.",
+    "how": "Uploads go through OCR: Tesseract for images, text extraction for PDFs. GPT-4o in JSON mode turns invoice text into structured fields and labels each transaction, and a regex parser takes over when the AI quota is unavailable. The categorized history then feeds GPT-4o prompts that draft budgets and daily insights. SMS and email alerts arrive through a webhook."
+  },
+  {
+    "id": "this-site",
+    "title": "This site",
+    "short": "This site",
+    "years": "2025–now",
+    "description": "This portfolio: a Next.js site with a Notion-powered blog and this interactive career map.",
+    "highlights": [
+      "Blog content comes from the Notion API with hourly revalidation, RSS, sitemap and generated social images",
+      "The career map is hand-built SVG with pan, pinch-zoom, inertia and keyboard navigation",
+      "Built AI-first with Claude Code, with reduced-motion support and a plain List view"
+    ],
+    "tech": [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Notion API"
+    ],
+    "link": "https://github.com/yashwanth1796/personal-website",
+    "linkLabel": "View on GitHub",
+    "ai": false,
+    "problem": "A resume can claim front-end craft, but it can’t show it.",
+    "how": "One set of career data drives everything. The map’s stations, lanes and 45° routes are computed from it and drawn as SVG, with pointer-event panning, pinch zoom and inertia. The List view and both resume PDFs come from the same data, and the blog is pulled from Notion with hourly revalidation."
+  },
+  {
+    "id": "fittrack",
+    "title": "FitTrack",
+    "short": "FitTrack",
+    "years": "2025",
+    "description": "A native iOS weight-loss and fitness tracker with personalized goals, workout plans and HealthKit.",
+    "highlights": [
+      "Calculates daily calorie targets (Mifflin-St Jeor BMR and TDEE) that adjust as weight changes",
+      "Food logging via Open Food Facts search and a barcode scanner, plus macros, water and meal templates",
+      "Apple HealthKit steps and active calories, bodyweight workout plans, streaks and smart reminders, all stored on-device"
+    ],
+    "tech": [
+      "Swift",
+      "SwiftUI",
+      "HealthKit",
+      "Open Food Facts API"
+    ],
+    "link": "",
+    "linkLabel": "",
+    "ai": false,
+    "problem": "Generic calorie apps give one-size-fits-all targets that don’t adapt as you lose weight.",
+    "how": "Calculates BMR with the Mifflin-St Jeor formula, scales it by activity level to get daily needs, and subtracts a deficit sized to your goal date, recalculating as your weight changes. Food comes from Open Food Facts by search or barcode, and HealthKit supplies steps and active calories for net calories. Everything stays on the device, with no login."
+  },
+  {
+    "id": "pennytogether",
+    "title": "PennyTogether",
+    "short": "PennyTogether",
+    "years": "2026",
+    "description": "A household finance app for planning spending together, across personal and joint accounts.",
+    "highlights": [
+      "CSV import that keeps the original rows, skips duplicates and auto-categorizes with merchant rules",
+      "Monthly spending plan with category drill-downs, bulk edits, audit history and spending insights",
+      "Bank linking through Plaid, with MFA, encrypted secrets and database-level isolation per household"
+    ],
+    "tech": [
+      "Next.js",
+      "NestJS",
+      "PostgreSQL",
+      "Prisma",
+      "Plaid"
+    ],
+    "link": "https://www.pennytogether.com",
+    "linkLabel": "Visit PennyTogether",
+    "ai": false,
+    "problem": "Couples split money across personal and joint accounts, so nobody sees the whole household picture or a shared plan.",
+    "how": "A Next.js front end and NestJS API run on PostgreSQL. CSV imports and Plaid-linked accounts become transactions scoped to a household, and the database itself enforces that isolation through separate roles. Merchant rules categorize spending, the monthly plan compares it against targets, and accounts are protected with MFA and encrypted secrets.",
+    "images": [
+      {
+        "src": "/projects/pennytogether/overview.png",
+        "alt": "PennyTogether overview: the month at a glance, with household spending against the plan. Amounts are hidden."
+      },
+      {
+        "src": "/projects/pennytogether/trend.png",
+        "alt": "PennyTogether overview: money in and out, and a six-month spending trend chart. Amounts are hidden."
+      },
+      {
+        "src": "/projects/pennytogether/insights.png",
+        "alt": "PennyTogether insights: patterns worth noticing, calculated with fixed rules rather than an AI service."
+      },
+      {
+        "src": "/projects/pennytogether/frequent.png",
+        "alt": "PennyTogether insights: adjustable thresholds for frequent purchases and a reduction scenario."
+      }
+    ]
+  }
+]

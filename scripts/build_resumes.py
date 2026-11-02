@@ -10,10 +10,29 @@ from reportlab.lib import colors
 from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.pagesizes import letter
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak, KeepTogether
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, KeepTogether
 
 ROOT = Path(__file__).resolve().parents[1]
 EXPERIENCES = json.loads((ROOT / 'src/data/experiences.json').read_text())
+MONTHS = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec']
+
+def parse_start(period):
+    """Mirrors parseStart() in src/lib/transit.ts: a missing or unknown month counts as December."""
+    import re
+    head = re.split(r'\s*[\u2013-]\s*', period)[0]
+    year = int(re.search(r'\d{4}', head).group())
+    word = re.search(r'[A-Za-z]+', head)
+    key = word.group()[:3].lower() if word else ''
+    return year, MONTHS.index(key) if key in MONTHS else 11
+
+def years_of_experience(today=None):
+    """Whole years since the earliest role started; matches yearsOfExperience() in src/lib/transit.ts."""
+    import datetime
+    today = today or datetime.date.today()
+    year, month = min(parse_start(exp['period']) for exp in EXPERIENCES)
+    return ((today.year - year) * 12 + (today.month - 1 - month)) // 12
+
+YEARS = f'{years_of_experience()}+ years'
 INK = colors.HexColor('#101828')
 BLUE = colors.HexColor('#2459db')
 GRAY = colors.HexColor('#475467')
@@ -32,23 +51,25 @@ STYLES = {
 VARIANTS = {
     'Frontend': {
         'headline': 'FRONT-END ENGINEERING | ARCHITECTURE & TECHNICAL LEADERSHIP',
-        'summary': 'Senior Software Engineer with 10 years of experience building enterprise web platforms. Leads modular React, Next.js, and TypeScript architecture, reusable components, and accessible user experiences. Combines hands-on delivery with mentoring, cross-functional collaboration, and Nx build and release automation. Brings production AI integration experience from SurveyMonkey and a broad foundation in APIs and data systems.',
+        'summary': 'Senior Software Engineer with ' + YEARS + ' of experience building enterprise web platforms. Leads modular React, Next.js, and TypeScript architecture, reusable components, and accessible user experiences. Combines hands-on delivery with mentoring, cross-functional collaboration, and Nx build and release automation. Brings production AI integration experience from SurveyMonkey and a broad foundation in APIs and data systems.',
         'skills': [
             ('Front-end', 'React, Next.js, TypeScript, JavaScript, Vue 3, Redux, Pinia, HTML, CSS, Nx, Storybook'),
-            ('Architecture & quality', 'Micro-frontends, reusable components, performance optimization, Jest, React Testing Library, Cypress, WCAG 2.1, AODA, NVDA, VoiceOver'),
+            ('Architecture & quality', 'Micro-frontends, reusable components, performance optimization, Jest, React Testing Library, Cypress, WCAG 2.2 AA, AODA, NVDA, VoiceOver'),
             ('Delivery & integration', 'GitHub Actions, Jenkins, Node.js, REST APIs, GraphQL, PostgreSQL, MongoDB'),
             ('AI integration at SurveyMonkey', 'OpenAI APIs, LangChain, streaming interfaces, tool calling, RAG'),
+            ('AI-assisted development', 'Claude Code, Codex, Cursor, GitHub Copilot, ChatGPT, Claude'),
         ],
         'sm_order': [0,1,2,3,6,4],
     },
     'FullStack': {
         'headline': 'FULL-STACK ENGINEERING | PLATFORM ARCHITECTURE & LEADERSHIP',
-        'summary': 'Senior Software Engineer with 10 years of experience delivering enterprise platforms across SaaS, financial services, telecom, and healthcare. Builds React and Next.js applications, Node.js and Python APIs, and SQL/NoSQL integrations. Combines modular architecture, infrastructure automation, and engineer mentoring with hands-on delivery. Recent work at SurveyMonkey includes production AI workflows and cloud deployments in partnership with platform teams.',
+        'summary': 'Senior Software Engineer with ' + YEARS + ' of experience delivering enterprise platforms across SaaS, financial services, telecom, and healthcare. Builds React and Next.js applications, Node.js and Python APIs, and SQL/NoSQL integrations. Combines modular architecture, infrastructure automation, and engineer mentoring with hands-on delivery. Recent work at SurveyMonkey includes production AI workflows and cloud deployments in partnership with platform teams.',
         'skills': [
             ('Applications & APIs', 'TypeScript, JavaScript, React, Next.js, Vue, Node.js, Python, Express, REST, GraphQL'),
             ('Data & infrastructure', 'PostgreSQL, MongoDB, MySQL, AWS, Terraform, Ansible, Docker'),
-            ('Architecture & delivery', 'Nx monorepos, micro-frontends, GitHub Actions, Jenkins, Jest, Cypress, React Testing Library, WCAG 2.1'),
+            ('Architecture & delivery', 'Nx monorepos, micro-frontends, GitHub Actions, Jenkins, Jest, Cypress, React Testing Library, WCAG 2.2 AA'),
             ('AI integration at SurveyMonkey', 'OpenAI APIs, LangChain, RAG, embeddings, tool calling, streaming UX'),
+            ('AI-assisted development', 'Claude Code, Codex, Cursor, GitHub Copilot, ChatGPT, Claude'),
         ],
         'sm_order': [0,5,3,4,2,6],
     },
@@ -61,7 +82,7 @@ def paragraph(text, style='body'):
     return Paragraph(text, STYLES[style])
 
 def role(exp, highlights):
-    content = [paragraph(clean(exp['company']) + ' | ' + clean(exp['role']), 'role'), paragraph(clean(exp['period']) + ' | ' + clean(exp['location']), 'date')]
+    content = [paragraph(clean(exp['company']) + ' | ' + clean(exp['role']), 'role'), paragraph(clean(exp['period']) + ' | ' + clean(exp['location']) + (' | ' + clean(exp['employment']) if exp.get('employment') else ''), 'date')]
     content += [paragraph('- ' + clean(item), 'bullet') for item in highlights]
     return KeepTogether(content)
 
@@ -73,7 +94,7 @@ def footer(canvas, doc):
     canvas.setFont('Helvetica', 8)
     canvas.setFillColor(GRAY)
     canvas.drawString(42, 22, 'Yashwanth Kumar Vandanapu')
-    canvas.drawRightString(width-42, 22, f'{doc.page} / 2')
+    canvas.drawRightString(width-42, 22, f'Page {doc.page}')
     if doc.page > 1:
         canvas.setFont('Helvetica-Bold', 9)
         canvas.drawString(42, height-31, 'YASHWANTH KUMAR VANDANAPU | EXPERIENCE CONTINUED')
@@ -90,7 +111,6 @@ def build(variant, config):
     story += [paragraph('PROFESSIONAL EXPERIENCE','section')]
     story += [role(EXPERIENCES[0], [EXPERIENCES[0]['highlights'][i] for i in config['sm_order']])]
     story += [role(EXPERIENCES[1], EXPERIENCES[1]['highlights'])]
-    story += [PageBreak()]
     for exp in EXPERIENCES[2:]:
         story += [role(exp, exp['highlights'][:3])]
     story += [paragraph('TECHNICAL LEADERSHIP','section'), paragraph('Mentoring engineers on architecture and coding standards; partnering across functions on product delivery; improving developer workflows through shared components, automated testing, and CI/CD. Experience working in globally distributed Agile teams.')]
