@@ -35,8 +35,8 @@ export default function CareerMap({ showWriting }: { showWriting: boolean }) {
   const [ready, setReady] = useState(false);
   const [trains, setTrains] = useState(false);
   const [explored, setExplored] = useState(false);
-  const exploredRef = useRef(false);
-  useEffect(() => { exploredRef.current = explored; }, [explored]);
+  // Set by any real interaction with the map; cancels and retires the first-visit preview.
+  const interacted = useRef(false);
   const [showDetails, setShowDetails] = useState(false);
   const [project, setProject] = useState<string | null>(null);
   const [side, setSide] = useState<string | null>(null);
@@ -113,12 +113,12 @@ export default function CareerMap({ showWriting }: { showWriting: boolean }) {
 
   const projectStops = useMemo(() => map.projects.flatMap(group => group.stops), [map]);
 
-  const select = useCallback((index: number | null) => {
+  const select = useCallback((index: number | null, byUser = true) => {
     setSelected(index);
     setProject(null);
     setSide(null);
     setShowDetails(false);
-    setExplored(true);
+    if (byUser) setExplored(true);
     if (index === null) flyTo(fitView());
     else focusOn(index);
   }, [fitView, flyTo, focusOn]);
@@ -177,19 +177,35 @@ export default function CareerMap({ showWriting }: { showWriting: boolean }) {
   useEffect(() => {
     if (!ready) return;
     const t = setTimeout(() => { if (!reduced.current) setTrains(true); }, 2200);
-    // First visit on a wide screen: open the current role once, so visitors see stations hold details.
+    // First visit on a wide screen: once the ripple has finished, open the current role so
+    // visitors see that stations hold details. Any real interaction cancels and retires it.
+    const PREVIEW_KEY = "map-previewed";
+    const remember = () => { try { localStorage.setItem(PREVIEW_KEY, "1"); } catch {} };
+    let seen = true;
+    try { seen = !!localStorage.getItem(PREVIEW_KEY); } catch {}
     let peek: ReturnType<typeof setTimeout> | undefined;
-    try {
-      if (window.innerWidth >= 1100 && !localStorage.getItem("map-previewed")) {
-        peek = setTimeout(() => {
-          if (exploredRef.current || document.documentElement.dataset.view === "list") return;
-          localStorage.setItem("map-previewed", "1");
-          const current = stations.findIndex(s => s.current);
-          if (current >= 0) select(current);
-        }, reduced.current ? 1200 : 3800);
-      }
-    } catch {}
-    return () => { clearTimeout(t); if (peek) clearTimeout(peek); };
+    const el = wrapRef.current;
+    const onInteract = () => {
+      if (interacted.current) return;
+      interacted.current = true;
+      if (peek) clearTimeout(peek);
+      remember();
+    };
+    const events = ["pointerdown", "wheel", "keydown", "focusin"] as const;
+    if (el) for (const type of events) el.addEventListener(type, onInteract, { passive: true });
+    if (!seen && window.innerWidth >= 1100) {
+      peek = setTimeout(() => {
+        if (interacted.current || document.visibilityState !== "visible" || document.documentElement.dataset.view === "list") return;
+        remember();
+        const current = stations.findIndex(s => s.current);
+        if (current >= 0) select(current, false);
+      }, reduced.current ? 1200 : 5200);
+    }
+    return () => {
+      clearTimeout(t);
+      if (peek) clearTimeout(peek);
+      if (el) for (const type of events) el.removeEventListener(type, onInteract);
+    };
   }, [ready, select]);
 
   useEffect(() => {
@@ -521,7 +537,7 @@ export default function CareerMap({ showWriting }: { showWriting: boolean }) {
         </div>
       </div>
 
-      <p className="hint" data-hidden={explored || undefined} aria-hidden="true">Tap any station or stop for details</p>
+      <p className="hint" data-hidden={explored || undefined} aria-hidden="true"><span className="hint-fine">Drag to explore, click any station or stop</span><span className="hint-touch">Drag to explore, tap any station or stop</span></p>
 
       <aside className="panel" aria-label="Station details" aria-hidden={selected === null && side === null} inert={selected === null && side === null}>
         <button type="button" className="panel-close" aria-label="Close" onClick={() => select(null)}><Icon d={icons.close} /></button>
