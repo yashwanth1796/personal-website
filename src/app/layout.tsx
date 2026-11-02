@@ -1,9 +1,11 @@
 import { serializeJsonLd } from "@/lib/serialization";
+import { yearsOfExperience } from "@/lib/transit";
 import type { Metadata } from "next";
 import { Overpass } from "next/font/google";
 import "./globals.css";
 
 const siteUrl = "https://yashwanth-vandanapu.dev";
+const years = `${yearsOfExperience()}+ years`;
 
 const overpass = Overpass({ subsets: ["latin"], variable: "--font-overpass", display: "swap" });
 
@@ -14,7 +16,7 @@ export const metadata: Metadata = {
     template: "%s | Yashwanth Kumar Vandanapu",
   },
   description:
-    "Senior Software Engineer with 9+ years of experience building enterprise-scale React applications, AI/LLM integrations, and accessible (WCAG 2.2 AA) web platforms. Expert in Next.js and TypeScript, working AI-first with Claude Code, Codex, Cursor, and GitHub Copilot.",
+    `Senior Software Engineer with ${years} of experience building enterprise-scale React applications, AI/LLM integrations, and accessible (WCAG 2.2 AA) web platforms. Expert in Next.js and TypeScript, working AI-first with Claude Code, Codex, Cursor, and GitHub Copilot.`,
   keywords: [
     "Yashwanth Kumar Vandanapu",
     "Senior Software Engineer",
@@ -54,7 +56,7 @@ export const metadata: Metadata = {
     siteName: "Yashwanth Kumar Vandanapu",
     title: "Yashwanth Kumar Vandanapu | Senior Software Engineer",
     description:
-      "Senior Software Engineer specializing in React, Next.js, AI/LLM integrations, and enterprise-scale platforms. 9+ years of experience building accessible, high-performance web applications.",
+      `Senior Software Engineer specializing in React, Next.js, AI/LLM integrations, and enterprise-scale platforms. ${years} of experience building accessible, high-performance web applications.`,
     images: [
       {
         url: "/opengraph-image",

@@ -105,6 +105,20 @@ const allSide = personal as SideProject[];
 export const sideProjects: SideProject[] = allSide.filter(p => !p.minor);
 export const minorSideProjects: SideProject[] = allSide.filter(p => p.minor);
 
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const startOf = (period: string) => {
+  const [month, year] = period.split(/\s*[–-]\s*/)[0].trim().split(/\s+/);
+  return new Date(Number(year), Math.max(0, MONTHS.indexOf(month)), 1);
+};
+
+/** Whole years since the earliest role started, e.g. 9 for Feb 2017 → Nov 2026. */
+export function yearsOfExperience(now = new Date()) {
+  const first = Math.min(...stations.map(s => startOf(s.period).getTime()));
+  const d = new Date(first);
+  const months = (now.getFullYear() - d.getFullYear()) * 12 + (now.getMonth() - d.getMonth());
+  return Math.floor(months / 12);
+}
+
 export type Orientation = "horizontal" | "vertical";
 
 const LANE_GAP = 16;
@@ -140,21 +154,40 @@ export function layout(orientation: Orientation) {
     return out.map(toXY).map(([x, y], i) => `${i ? "L" : "M"}${x.toFixed(1)} ${y.toFixed(1)}`).join(" ");
   }
 
-  const lanePaths = lanes.map((lane, li) => {
+  const lanePaths = lanes.flatMap((lane, li) => {
     const served = stations.map((s, i) => (s.lanes.includes(lane.id) ? i : -1)).filter(i => i >= 0);
+    if (!served.length) return [];
     const off = laneOffset(li);
+    const at = (i: number): Pt => [stationPts[i].m, stationPts[i].c + off];
+    const span = (a: number, b: number) => Array.from({ length: b - a + 1 }, (_, k) => at(a + k));
     const first = served[0];
     const lastServed = served[served.length - 1];
-    const lead = lane.id === "ai" ? 0.55 : 0;
-    const pts: Pt[] = [];
-    if (lead) pts.push([stationPts[first].m - gap * lead, stationPts[first].c + off]);
-    for (let i = first; i <= lastServed; i++) pts.push([stationPts[i].m, stationPts[i].c + off]);
+    // A role that used the technology on its own still gets a short solid stub at its station.
+    const stub = (i: number) => route([[stationPts[i].m - gap * 0.3, stationPts[i].c + off], [stationPts[i].m + gap * 0.3, stationPts[i].c + off]]);
+
+    // Solid where consecutive roles used the technology; dotted where it skips roles that didn't.
+    const solid: string[] = [];
+    const skipped: string[] = [];
+    let run: number[] = [first];
+    const close = () => solid.push(run.length > 1 ? route(run.map(at)) : stub(run[0]));
+    for (let k = 1; k < served.length; k++) {
+      const a = served[k - 1], b = served[k];
+      if (b === a + 1) run.push(b);
+      else {
+        close();
+        skipped.push(route(span(a, b)));
+        run = [b];
+      }
+    }
+    close();
     const live = lastServed === stations.length - 1;
-    return {
+    return [{
       ...lane,
-      d: route(pts),
+      d: first === lastServed ? stub(first) : route(span(first, lastServed)),
+      solid,
+      skipped,
       next: live ? route([[last.m, last.c + off], [terminus.m, terminus.c + off]]) : null,
-    };
+    }];
   });
 
   const half = SPAN / 2 + 10;
@@ -206,17 +239,25 @@ export function layout(orientation: Orientation) {
   const width = h ? terminus.m + 110 : 470;
   const height = h ? 790 : terminus.m + 230 + (sideProjects.length - 1) * 130 + 110;
 
-  const fs = stationPts[2];
-  const tl = stationPts[3];
-  const mid = (fs.m + tl.m) / 2;
-  const moveNote = h
-    ? { x: mid + 14, y: cross("India") + 26, anchor: "start" as const }
-    : { x: (cross("India") + cross("Canada")) / 2 + 50, y: (fs.m + tl.m) / 2 + 4, anchor: "start" as const };
+  // The move between regions is found from the data, not from fixed positions.
+  const moveAt = stations.findIndex((s, i) => i > 0 && s.region !== stations[i - 1].region);
+  const moveNote = moveAt > 0
+    ? (() => {
+        const from = stationPts[moveAt - 1], to = stationPts[moveAt];
+        const midM = (from.m + to.m) / 2;
+        const year = stations[moveAt].period.match(/\d{4}/)?.[0];
+        const text = `Moved to ${stations[moveAt].region}${year ? `, ${year}` : ""}`;
+        return h
+          ? { text, x: midM + 14, y: Math.max(from.c, to.c) + 26, anchor: "start" as const }
+          : { text, x: (from.c + to.c) / 2 + 50, y: midM + 4, anchor: "start" as const };
+      })()
+    : null;
   const regions = h
-    ? [
-        { name: "India", x: stationPts[1].m, y: 600 },
-        { name: "Canada", x: stationPts[4].m + gap / 2, y: 96 },
-      ]
+    ? [...new Set(stations.map(s => s.region))].map(name => {
+        const ms = stationPts.filter((_, i) => stations[i].region === name).map(p => p.m);
+        const lower = cross(name) === Math.max(...stations.map(s => cross(s.region)));
+        return { name, x: (Math.min(...ms) + Math.max(...ms)) / 2, y: lower ? 600 : 96 };
+      })
     : [];
 
   return { orientation, width, height, half, lanes: lanePaths, stations: stationLayout, projects: projectLayout, side, terminus: terminusLayout, laneOffset, moveNote, regions };

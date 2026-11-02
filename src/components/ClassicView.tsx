@@ -1,11 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { lanes, minorSideProjects, projectList, sideProjects, SIDE_COLOR, stations } from "@/lib/transit";
+import { lanes, minorSideProjects, projectList, sideProjects, SIDE_COLOR, stations, yearsOfExperience } from "@/lib/transit";
 import CopyButton from "./CopyButton";
 import ViewToggle from "./ViewToggle";
 
-const firstYear = Math.min(...stations.map(s => Number(s.period.match(/\d{4}/)?.[0] ?? 9999)));
-const years = new Date().getFullYear() - firstYear;
 const results = projectList.filter(p => p.outcome).map(p => ({ outcome: p.outcome!, company: p.company }));
 const laneCounts = lanes.map(l => ({ ...l, count: stations.filter(s => s.lanes.includes(l.id)).length }));
 const FEATURED = "pennytogether";
@@ -41,7 +39,7 @@ export default function ClassicView({ showWriting }: { showWriting: boolean }) {
 
       <section className="intro" aria-labelledby="intro-title">
         <h2 id="intro-title">I build React and Next.js products for large teams: shared UI foundations, accessible interfaces, and AI features that ship.</h2>
-        <p className="intro-facts"><span>{years}+ years</span><span>{stations.length} companies</span><span>Canada and India</span><span>Mentors engineers</span></p>
+        <p className="intro-facts"><span>{yearsOfExperience()}+ years</span><span>{stations.length} companies</span><span>Canada and India</span><span>Mentors engineers</span></p>
         <p className="intro-ai">Works AI-first every day with Claude Code, Codex, Cursor and GitHub Copilot.</p>
         <ul className="intro-results" aria-label="Results">
           {results.map(r => (

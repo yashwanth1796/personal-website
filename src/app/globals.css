@@ -55,6 +55,10 @@
 /* Lines */
 .lane { transition: opacity 320ms ease; }
 .lane-line { fill: none; stroke: var(--c); stroke-width: 10; stroke-linecap: round; stroke-linejoin: round; }
+.lane-track { fill: none; stroke: none; }
+.lane-skip { fill: none; stroke: var(--c); stroke-width: 4; stroke-linecap: round; stroke-dasharray: 1 9; opacity: .55; }
+.is-live .lane-skip { opacity: 0; animation: fade-skip 700ms ease forwards; animation-delay: 1.4s; }
+@keyframes fade-skip { to { opacity: .55; } }
 .lane-next { fill: none; stroke: var(--c); stroke-width: 10; stroke-linecap: round; stroke-dasharray: 2 16; opacity: .8; }
 .metro-map[data-filtered="true"] .lane:not([data-on]) { opacity: .1; }
 .train { fill: #fff; stroke: var(--c); stroke-width: 3.5; opacity: 0; animation: fade-in 600ms ease forwards; }

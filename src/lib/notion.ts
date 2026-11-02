@@ -78,10 +78,13 @@ export const getAllPosts = cache(async (): Promise<BlogPost[]> => {
     });
     for (const page of data.results) {
       const properties = page.properties;
+      const title = extractText(properties.Title?.title).trim();
+      // A page without a title is a draft that was ticked Published by mistake.
+      if (!title) continue;
       const cover = properties.Cover?.files[0];
       posts.push({
         id: page.id,
-        title: extractText(properties.Title?.title) || "Untitled",
+        title,
         slug: extractText(properties.Slug?.rich_text) || page.id,
         description: extractText(properties.Description?.rich_text),
         date: properties.Date?.date?.start || page.created_time.split("T")[0],
@@ -92,8 +95,7 @@ export const getAllPosts = cache(async (): Promise<BlogPost[]> => {
     }
     cursor = data.next_cursor || undefined;
   } while (cursor);
-  // A page without a title is a draft that was ticked Published by mistake.
-  return posts.filter(post => post.title !== "Untitled");
+  return posts;
 });
 
 export const getPostBySlug = cache(async (slug: string): Promise<BlogPostWithContent | null> => {

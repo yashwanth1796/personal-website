@@ -14,6 +14,20 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, KeepTogethe
 
 ROOT = Path(__file__).resolve().parents[1]
 EXPERIENCES = json.loads((ROOT / 'src/data/experiences.json').read_text())
+MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+def years_of_experience(today=None):
+    """Whole years since the earliest role started; matches yearsOfExperience() in src/lib/transit.ts."""
+    import datetime, re
+    today = today or datetime.date.today()
+    starts = []
+    for exp in EXPERIENCES:
+        month, year = re.split(r'\s*[\u2013-]\s*', exp['period'])[0].split()
+        starts.append((int(year), MONTHS.index(month)))
+    year, month = min(starts)
+    return ((today.year - year) * 12 + (today.month - 1 - month)) // 12
+
+YEARS = f'{years_of_experience()}+ years'
 INK = colors.HexColor('#101828')
 BLUE = colors.HexColor('#2459db')
 GRAY = colors.HexColor('#475467')
@@ -32,7 +46,7 @@ STYLES = {
 VARIANTS = {
     'Frontend': {
         'headline': 'FRONT-END ENGINEERING | ARCHITECTURE & TECHNICAL LEADERSHIP',
-        'summary': 'Senior Software Engineer with 9+ years of experience building enterprise web platforms. Leads modular React, Next.js, and TypeScript architecture, reusable components, and accessible user experiences. Combines hands-on delivery with mentoring, cross-functional collaboration, and Nx build and release automation. Brings production AI integration experience from SurveyMonkey and a broad foundation in APIs and data systems.',
+        'summary': 'Senior Software Engineer with ' + YEARS + ' of experience building enterprise web platforms. Leads modular React, Next.js, and TypeScript architecture, reusable components, and accessible user experiences. Combines hands-on delivery with mentoring, cross-functional collaboration, and Nx build and release automation. Brings production AI integration experience from SurveyMonkey and a broad foundation in APIs and data systems.',
         'skills': [
             ('Front-end', 'React, Next.js, TypeScript, JavaScript, Vue 3, Redux, Pinia, HTML, CSS, Nx, Storybook'),
             ('Architecture & quality', 'Micro-frontends, reusable components, performance optimization, Jest, React Testing Library, Cypress, WCAG 2.2 AA, AODA, NVDA, VoiceOver'),
@@ -44,7 +58,7 @@ VARIANTS = {
     },
     'FullStack': {
         'headline': 'FULL-STACK ENGINEERING | PLATFORM ARCHITECTURE & LEADERSHIP',
-        'summary': 'Senior Software Engineer with 9+ years of experience delivering enterprise platforms across SaaS, financial services, telecom, and healthcare. Builds React and Next.js applications, Node.js and Python APIs, and SQL/NoSQL integrations. Combines modular architecture, infrastructure automation, and engineer mentoring with hands-on delivery. Recent work at SurveyMonkey includes production AI workflows and cloud deployments in partnership with platform teams.',
+        'summary': 'Senior Software Engineer with ' + YEARS + ' of experience delivering enterprise platforms across SaaS, financial services, telecom, and healthcare. Builds React and Next.js applications, Node.js and Python APIs, and SQL/NoSQL integrations. Combines modular architecture, infrastructure automation, and engineer mentoring with hands-on delivery. Recent work at SurveyMonkey includes production AI workflows and cloud deployments in partnership with platform teams.',
         'skills': [
             ('Applications & APIs', 'TypeScript, JavaScript, React, Next.js, Vue, Node.js, Python, Express, REST, GraphQL'),
             ('Data & infrastructure', 'PostgreSQL, MongoDB, MySQL, AWS, Terraform, Ansible, Docker'),

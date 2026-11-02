@@ -38,6 +38,8 @@ export default function CareerMap({ showWriting }: { showWriting: boolean }) {
   const [showDetails, setShowDetails] = useState(false);
   const [project, setProject] = useState<string | null>(null);
   const [side, setSide] = useState<string | null>(null);
+  const focus = useRef<{ selected: number | null; side: string | null }>({ selected: null, side: null });
+  useEffect(() => { focus.current = { selected, side }; }, [selected, side]);
 
   const wrapRef = useRef<HTMLDivElement>(null);
   const svgRef = useRef<SVGSVGElement>(null);
@@ -167,14 +169,23 @@ export default function CareerMap({ showWriting }: { showWriting: boolean }) {
   useEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
+    // Re-frame only when the stage size really changes (rotation, window resize, or the
+    // map becoming visible again), never on the observer's first callback, so selection
+    // fly-to animations are not interrupted.
+    let last = { w: el.clientWidth, h: el.clientHeight };
     const observer = new ResizeObserver(() => {
-      if (el.clientWidth === 0) return;
-      if (selected === null) { view.current = fitView(); apply(); }
-      else focusOn(selected);
+      const w = el.clientWidth, h = el.clientHeight;
+      if (w === 0 || (w === last.w && h === last.h)) return;
+      last = { w, h };
+      const { selected: current, side: currentSide } = focus.current;
+      const sideStop = currentSide ? map.side.stops.find(stop => stop.id === currentSide) : null;
+      if (sideStop) focusPoint(sideStop);
+      else if (current !== null) focusOn(current);
+      else { view.current = fitView(); apply(); }
     });
     observer.observe(el);
     return () => observer.disconnect();
-  }, [fitView, apply, focusOn, selected]);
+  }, [fitView, apply, focusOn, focusPoint, map]);
 
   // Pan, inertia, pinch, wheel.
   useEffect(() => {
@@ -256,8 +267,11 @@ export default function CareerMap({ showWriting }: { showWriting: boolean }) {
       e.preventDefault();
       stop();
       const p = local(e);
-      if (e.ctrlKey || e.metaKey) zoomAt(Math.exp(-e.deltaY * 0.01), p.x, p.y);
-      else { view.current = { ...view.current, x: view.current.x - e.deltaX, y: view.current.y - e.deltaY }; apply(); }
+      // Firefox mouse wheels report lines or pages, not pixels.
+      const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? svg.clientHeight : 1;
+      const dx = e.deltaX * unit, dy = e.deltaY * unit;
+      if (e.ctrlKey || e.metaKey) zoomAt(Math.exp(-dy * 0.01), p.x, p.y);
+      else { view.current = { ...view.current, x: view.current.x - dx, y: view.current.y - dy }; apply(); }
       setExplored(true);
     };
 
@@ -268,6 +282,7 @@ export default function CareerMap({ showWriting }: { showWriting: boolean }) {
       svg.removeEventListener("wheel", onWheel);
       window.removeEventListener("pointermove", onMove);
       window.removeEventListener("pointerup", onUp);
+      window.removeEventListener("pointercancel", onUp);
     };
   }, [apply, zoomAt]);
 
@@ -320,11 +335,13 @@ export default function CareerMap({ showWriting }: { showWriting: boolean }) {
           {map.regions.map(region => (
             <text key={region.name} className="region" x={region.x} y={region.y} textAnchor="middle" aria-hidden="true">{region.name}</text>
           ))}
-          <text className="move-note" x={map.moveNote.x} y={map.moveNote.y} textAnchor={map.moveNote.anchor} aria-hidden="true">Moved to Canada, 2021</text>
+          {map.moveNote && <text className="move-note" x={map.moveNote.x} y={map.moveNote.y} textAnchor={map.moveNote.anchor} aria-hidden="true">{map.moveNote.text}</text>}
 
           {map.lanes.map((l, i) => (
             <g key={l.id} className="lane" data-on={activeLanes.has(l.id) || undefined} style={{ "--i": i, "--c": l.color } as React.CSSProperties}>
-              <path id={`lane-${l.id}-${orientation}`} className="lane-line" d={l.d} pathLength={1} />
+              <path id={`lane-${l.id}-${orientation}`} className="lane-track" d={l.d} />
+              {l.skipped.map(d => <path key={d} className="lane-skip" d={d} />)}
+              {l.solid.map(d => <path key={d} className="lane-line" d={d} pathLength={1} />)}
               {l.next && <path className="lane-next" d={l.next} />}
               {trains && (
                 <circle className="train" r="5.5">
