@@ -35,6 +35,8 @@ export default function CareerMap({ showWriting }: { showWriting: boolean }) {
   const [ready, setReady] = useState(false);
   const [trains, setTrains] = useState(false);
   const [explored, setExplored] = useState(false);
+  const exploredRef = useRef(false);
+  useEffect(() => { exploredRef.current = explored; }, [explored]);
   const [showDetails, setShowDetails] = useState(false);
   const [project, setProject] = useState<string | null>(null);
   const [side, setSide] = useState<string | null>(null);
@@ -173,10 +175,22 @@ export default function CareerMap({ showWriting }: { showWriting: boolean }) {
   }, [refocus]);
 
   useEffect(() => {
-    if (!ready || reduced.current) return;
-    const t = setTimeout(() => setTrains(true), 2200);
-    return () => clearTimeout(t);
-  }, [ready]);
+    if (!ready) return;
+    const t = setTimeout(() => { if (!reduced.current) setTrains(true); }, 2200);
+    // First visit on a wide screen: open the current role once, so visitors see stations hold details.
+    let peek: ReturnType<typeof setTimeout> | undefined;
+    try {
+      if (window.innerWidth >= 1100 && !localStorage.getItem("map-previewed")) {
+        peek = setTimeout(() => {
+          if (exploredRef.current || document.documentElement.dataset.view === "list") return;
+          localStorage.setItem("map-previewed", "1");
+          const current = stations.findIndex(s => s.current);
+          if (current >= 0) select(current);
+        }, reduced.current ? 1200 : 3800);
+      }
+    } catch {}
+    return () => { clearTimeout(t); if (peek) clearTimeout(peek); };
+  }, [ready, select]);
 
   useEffect(() => {
     const el = wrapRef.current;
@@ -379,6 +393,7 @@ export default function CareerMap({ showWriting }: { showWriting: boolean }) {
                     onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openProject(stop.id); } }}
                   >
                     <circle className="project-hit" cx={stop.x} cy={stop.y} r="16" />
+                    <circle className="ripple" cx={stop.x} cy={stop.y} r="10" style={{ "--r": stop.station + 0.5 } as React.CSSProperties} />
                     <circle className="project-dot" cx={stop.x} cy={stop.y} r="8.5" />
                     <text className="project-label" x={stop.labelX} y={stop.labelY} aria-hidden="true">{stop.short}</text>
                   </g>
@@ -390,7 +405,7 @@ export default function CareerMap({ showWriting }: { showWriting: boolean }) {
           <g className="side-line" data-dim={(lane !== null && lane !== "side") || selected !== null || undefined} style={{ "--c": SIDE_COLOR, "--i": 9 } as React.CSSProperties}>
             <path className="lane-line" d={map.side.d} pathLength={1} />
             <text className="side-title" x={map.side.title.x} y={map.side.title.y} textAnchor={map.side.title.anchor} aria-hidden="true">Side projects</text>
-            {map.side.stops.map(stop => (
+            {map.side.stops.map((stop, j) => (
               <g
                 key={stop.id}
                 className="side-stop"
@@ -403,6 +418,7 @@ export default function CareerMap({ showWriting }: { showWriting: boolean }) {
                 onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openSide(stop.id); } }}
               >
                 <circle className="project-hit" cx={stop.x} cy={stop.y} r="20" />
+                <circle className="ripple" cx={stop.x} cy={stop.y} r="14" style={{ "--r": stations.length + 1 + j * 0.5 } as React.CSSProperties} />
                 <circle className="side-dot" cx={stop.x} cy={stop.y} r="13" />
                 {stop.ai && <circle className="side-ai" cx={stop.x} cy={stop.y} r="5" />}
                 <text className="st-name" x={stop.label.x} y={stop.label.y} textAnchor={stop.label.anchor} aria-hidden="true">{stop.short}</text>
@@ -428,6 +444,7 @@ export default function CareerMap({ showWriting }: { showWriting: boolean }) {
                 onClick={() => { if (!moved.current) select(selected === i ? null : i); }}
                 onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(selected === i ? null : i); } }}
               >
+                <rect className="ripple" {...pill(s.x, s.y)} style={{ "--r": i } as React.CSSProperties} />
                 <rect className="focus-ring" {...pill(s.x, s.y)} />
                 {s.current && <rect className="pulse" {...pill(s.x, s.y)} />}
                 <rect className="pill" {...pill(s.x, s.y)} />
@@ -451,6 +468,7 @@ export default function CareerMap({ showWriting }: { showWriting: boolean }) {
             onClick={() => { if (!moved.current) select(selected === TERMINUS ? null : TERMINUS); }}
             onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); select(TERMINUS); } }}
           >
+            <rect className="ripple" {...pill(map.terminus.x, map.terminus.y)} style={{ "--r": stations.length } as React.CSSProperties} />
             <rect className="focus-ring" {...pill(map.terminus.x, map.terminus.y)} />
             <rect className="pill" {...pill(map.terminus.x, map.terminus.y)} />
             <text className="st-years" x={map.terminus.label.x} y={map.terminus.label.y - 2} textAnchor={map.terminus.label.anchor} aria-hidden="true">Next stop</text>
@@ -503,7 +521,7 @@ export default function CareerMap({ showWriting }: { showWriting: boolean }) {
         </div>
       </div>
 
-      <p className="hint" data-hidden={explored || undefined} aria-hidden="true">Drag to explore, tap a station</p>
+      <p className="hint" data-hidden={explored || undefined} aria-hidden="true">Tap any station or stop for details</p>
 
       <aside className="panel" aria-label="Station details" aria-hidden={selected === null && side === null} inert={selected === null && side === null}>
         <button type="button" className="panel-close" aria-label="Close" onClick={() => select(null)}><Icon d={icons.close} /></button>
