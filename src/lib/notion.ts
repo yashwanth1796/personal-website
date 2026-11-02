@@ -92,7 +92,8 @@ export const getAllPosts = cache(async (): Promise<BlogPost[]> => {
     }
     cursor = data.next_cursor || undefined;
   } while (cursor);
-  return posts;
+  // A page without a title is a draft that was ticked Published by mistake.
+  return posts.filter(post => post.title !== "Untitled");
 });
 
 export const getPostBySlug = cache(async (slug: string): Promise<BlogPostWithContent | null> => {

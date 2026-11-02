@@ -8,7 +8,7 @@
     "highlights": [
       "Led modular front-end architecture for enterprise SaaS applications using React, Next.js, TypeScript, and an Nx monorepo.",
       "Architected reusable React and Next.js components, reducing code redundancy by 30%.",
-      "Delivered WCAG 2.1-compliant interfaces with rigorous accessibility testing and front-end performance optimization.",
+      "Delivered WCAG 2.2 AA-compliant interfaces with rigorous accessibility testing and front-end performance optimization.",
       "Designed Nx monorepo CI/CD pipelines in GitHub Actions for builds, tests, linting, and releases across web apps and npm packages.",
       "Integrated OpenAI APIs and LangChain into survey workflows, with streaming UI responses, tool calls, and schema-driven forms.",
       "Built Node.js and Python APIs, GraphQL queries, and PostgreSQL/MongoDB integrations; partnered with platform teams on Terraform and AWS deployments.",
@@ -48,7 +48,8 @@
       "PostgreSQL",
       "MongoDB"
     ],
-    "current": false
+    "current": false,
+    "employment": "Contract"
   },
   {
     "company": "CITI Bank",
@@ -67,7 +68,8 @@
       "PostgreSQL",
       "REST APIs"
     ],
-    "current": false
+    "current": false,
+    "employment": "Contract"
   },
   {
     "company": "Telus",

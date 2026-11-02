@@ -1,7 +1,7 @@
 [
   {
     "title": "Survey authoring & shared UI foundations",
-    "category": "Enterprise SaaS \u2022 AI/LLM",
+    "category": "Enterprise SaaS • AI/LLM",
     "description": "Built reusable React and Next.js modules in an Nx monorepo for enterprise survey authoring, with AI assistance for content generation, routing, and validation.",
     "highlights": [
       "Reusable React and Next.js components reduced code redundancy by 30%.",
@@ -25,17 +25,27 @@
       "React + Next.js",
       "Nx monorepo",
       "Shared UI + CI/CD"
-    ]
+    ],
+    "caseStudy": {
+      "problem": "Enterprise survey-authoring apps were built with duplicated front-end code, and survey authors needed AI help with content, routing and validation.",
+      "role": "Led the modular front-end architecture in React, Next.js and TypeScript, and integrated OpenAI and LangChain into the authoring workflow.",
+      "decisions": [
+        "Moved shared UI into an Nx monorepo of reusable React and Next.js components, instead of per-app copies",
+        "Built GitHub Actions pipelines for builds, tests, linting and releases across web apps and npm packages",
+        "Streamed AI responses into the UI, with tool calls and schema-driven forms"
+      ],
+      "result": "30% less code redundancy, WCAG 2.2 AA-compliant interfaces, and AI-assisted survey authoring in production."
+    }
   },
   {
     "title": "Conversational Bot UI Framework",
-    "category": "AI/LLM \u2022 React Components",
+    "category": "AI/LLM • React Components",
     "description": "Developed reusable conversational and bot-driven UI components supporting streaming responses, tool calls, fallback chains, and dynamic multi-step workflows for enterprise applications.",
     "highlights": [
       "Real-time streaming response handling",
       "Function calling and tool integration",
       "Fallback chain management",
-      "Accessible WCAG 2.1 compliant interface"
+      "Accessible, WCAG 2.2 AA-compliant interface"
     ],
     "tech": [
       "React",
@@ -48,7 +58,7 @@
   },
   {
     "title": "Financial Workflow Automation",
-    "category": "FinTech \u2022 Workflow",
+    "category": "FinTech • Workflow",
     "description": "Modernized RRSP and TFSA workflows in Vue 3 using composable APIs and Pinia, with schema-driven forms, validation, and reliable form session recovery.",
     "highlights": [
       "Vue 3 migration for investment and retirement workflows",
@@ -72,11 +82,21 @@
       "Vue 3 + Pinia",
       "Forms + validation",
       "APIs + data recovery"
-    ]
+    ],
+    "caseStudy": {
+      "problem": "RRSP and TFSA investment workflows needed to move to Vue 3, and form defects were too frequent.",
+      "role": "Led the Vue 3 migration and set up the testing frameworks.",
+      "decisions": [
+        "Rebuilt the workflows with Vue 3 composable APIs and Pinia for state",
+        "Made the investment and retirement forms schema-driven, with shared validation",
+        "Introduced Jest and Karma test frameworks, plus session recovery backed by SQL and NoSQL caching"
+      ],
+      "result": "40% fewer defects across the investment and retirement workflows."
+    }
   },
   {
     "title": "Enterprise Dashboard Rebuild",
-    "category": "Banking \u2022 React",
+    "category": "Banking • React",
     "description": "Rebuilt enterprise banking dashboards in React and Redux, with multi-step approval flows, API integrations, and PostgreSQL-backed report caching.",
     "highlights": [
       "25% improvement in workflow efficiency",
@@ -97,11 +117,21 @@
       "React + Redux",
       "Approval workflows",
       "PostgreSQL caching"
-    ]
+    ],
+    "caseStudy": {
+      "problem": "Enterprise banking dashboards and multi-step approval flows needed to be faster to work through.",
+      "role": "Rebuilt the dashboards and approval flows in React and Redux.",
+      "decisions": [
+        "Managed multi-step approval state in Redux",
+        "Wrapped backend APIs in reusable front-end components",
+        "Added a PostgreSQL caching layer for reports, backed by structured unit and integration tests"
+      ],
+      "result": "25% improvement in workflow efficiency."
+    }
   },
   {
     "title": "Micro-Frontend Architecture",
-    "category": "Telecom \u2022 Full Stack",
+    "category": "Telecom • Full Stack",
     "description": "Designed and implemented micro-frontend React/Next.js modules for internal provisioning workflows and customer management systems with IaC using Terraform and Ansible.",
     "highlights": [
       "Module federation for scalable architecture",
@@ -121,7 +151,7 @@
   },
   {
     "title": "Healthcare Workflow Platform",
-    "category": "Healthcare \u2022 Enterprise",
+    "category": "Healthcare • Enterprise",
     "description": "Developed healthcare workflow modules with form-heavy UI flows, high-performance AWS deployments, and comprehensive accessibility compliance for global healthcare providers.",
     "highlights": [
       "Complex multi-step form workflows",
