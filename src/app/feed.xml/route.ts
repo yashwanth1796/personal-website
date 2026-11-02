@@ -3,6 +3,8 @@ import { getAllPosts } from "@/lib/notion";
 
 const siteUrl = "https://yashwanth-vandanapu.dev";
 
+export const dynamic = "force-static";
+
 export async function GET() {
   const posts = await getAllPosts();
 

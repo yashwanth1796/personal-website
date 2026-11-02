@@ -3,7 +3,6 @@ import ClassicView from "@/components/ClassicView";
 import { viewBootScript } from "@/components/ViewToggle";
 import { getAllPosts } from "@/lib/notion";
 
-export const revalidate = 3600;
 
 export default async function Home() {
   // The Writing link appears once a real post is published. If Notion is unreachable,
