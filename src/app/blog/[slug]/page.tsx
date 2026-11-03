@@ -1,5 +1,5 @@
 import { serializeJsonLd } from "@/lib/serialization";
-import { getPostBySlug, getAllPosts, calculateReadingTime } from "@/lib/notion";
+import { getPostBySlug, getStaticPostParams, calculateReadingTime } from "@/lib/notion";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -49,14 +49,13 @@ export async function generateMetadata({
   };
 }
 
-export async function generateStaticParams() {
-  const posts = await getAllPosts();
-  return posts.map((post) => ({
-    slug: post.slug,
-  }));
+// Only posts known at build time exist; unknown slugs are a static 404.
+export const dynamicParams = false;
+
+export function generateStaticParams() {
+  return getStaticPostParams();
 }
 
-export const revalidate = 3600;
 
 export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const { slug } = await params;
