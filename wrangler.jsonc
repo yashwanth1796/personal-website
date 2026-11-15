@@ -4,6 +4,10 @@
   // There is no Worker script, so requests use no compute and cost nothing on the free plan.
   "name": "portfolio",
   "compatibility_date": "2026-10-01",
+  "routes": [
+    { "pattern": "yashwanth-vandanapu.dev", "custom_domain": true },
+    { "pattern": "www.yashwanth-vandanapu.dev", "custom_domain": true }
+  ],
   "assets": {
     "directory": "./out",
     "not_found_handling": "404-page",
