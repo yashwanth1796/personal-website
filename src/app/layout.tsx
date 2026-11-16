@@ -8,7 +8,7 @@ const siteUrl = "https://yashwanth-vandanapu.dev";
 
 const overpass = Overpass({ subsets: ["latin"], variable: "--font-overpass", display: "swap" });
 
-// Built per request so the years of experience never go stale between deploys.
+// Computed at build time; the daily scheduled rebuild keeps the years current.
 export function generateMetadata(): Metadata {
   const years = `${yearsOfExperience()}+ years`;
   return {

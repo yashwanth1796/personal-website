@@ -136,3 +136,13 @@ export function calculateReadingTime(content: NotionBlock[]): number {
   count(content);
   return Math.max(1, Math.ceil(wordCount / 200));
 }
+
+/**
+ * Paths for the static export. It needs at least one, so with no published posts this
+ * returns a placeholder that renders the 404 page and the build still succeeds.
+ */
+export async function getStaticPostParams() {
+  const posts = await getAllPosts();
+  if (posts.length === 0) return [{ slug: "no-posts" }];
+  return posts.map((post) => ({ slug: post.slug }));
+}

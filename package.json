@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "test": "tsx --test tests/*.test.tsx",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "preview": "next build && wrangler dev",
+    "deploy": "next build && wrangler deploy"
   },
   "dependencies": {
     "@notionhq/client": "^5.4.0",
@@ -25,7 +27,8 @@
     "eslint-config-next": "^16.4.1",
     "tailwindcss": "^4",
     "tsx": "^4.23.15",
-    "typescript": "^5"
+    "typescript": "^5",
+    "wrangler": "^4.156.2"
   },
   "engines": {
     "node": ">=20.9.0"

@@ -1,7 +1,7 @@
 import { ImageResponse } from "next/og";
 import { lanes, projectList, stations, yearsOfExperience } from "@/lib/transit";
 
-export const runtime = "nodejs";
+export const dynamic = "force-static";
 export const alt = "Yashwanth Kumar Vandanapu, Senior Software Engineer: a career drawn as a transit map";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";

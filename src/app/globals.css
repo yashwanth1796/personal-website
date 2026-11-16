@@ -371,7 +371,7 @@ details[open] > summary .chev { transform: rotate(180deg); }
 .terminus-links a:hover { color: #fff; text-decoration-color: #fff; }
 
 @media (max-width: 900px) {
-  .classic-body { grid-template-columns: 1fr; }
+  .classic-body { grid-template-columns: minmax(0, 1fr); }
   .classic-side-nav { display: none; }
 }
 @media (max-width: 720px) {
@@ -382,7 +382,7 @@ details[open] > summary .chev { transform: rotate(180deg); }
   .tl-item { margin-left: 38px; padding: 18px 16px; }
   .tl-stop { left: -38px; width: 28px; }
   .tl-years { margin-left: 0; flex-basis: 100%; }
-  .featured { grid-template-columns: 1fr; }
+  .featured { grid-template-columns: minmax(0, 1fr); }
   .featured-foot { align-items: stretch; }
   .featured-foot .sp-tech { text-align: left; max-width: none; }
   .featured-foot .btn-primary { justify-content: center; }

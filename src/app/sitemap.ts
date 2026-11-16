@@ -3,7 +3,8 @@ import { getAllPosts } from "@/lib/notion";
 
 const siteUrl = "https://yashwanth-vandanapu.dev";
 
-export const revalidate = 3600;
+
+export const dynamic = "force-static";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Get all blog posts

@@ -32,7 +32,7 @@ The database must have these properties:
 | Cover | Files | Optional article cover |
 | Published | Checkbox | Only checked pages appear publicly |
 
-The integration uses Notion's `2022-06-28` API version and its database query endpoint. Blog pages revalidate hourly. Listings and nested block content are paginated. Paragraphs, headings, nested lists, toggles, tasks, code, quotes, callouts, images, videos, bookmarks, and embeds are rendered; unsupported block types are omitted, with their children rendered where available. Use supported blocks for article content.
+The integration uses Notion's `2022-06-28` API version and its database query endpoint. Blog content is fetched at build time; the deploy workflow rebuilds daily, so new posts appear within a day (or run the workflow manually to publish sooner). Listings and nested block content are paginated. Paragraphs, headings, nested lists, toggles, tasks, code, quotes, callouts, images, videos, bookmarks, and embeds are rendered; unsupported block types are omitted, with their children rendered where available. Use supported blocks for article content.
 
 API errors propagate instead of publishing sample posts or incomplete articles. Readers see a retry screen for blog rendering failures. RSS and sitemap requests also fail when the upstream service fails, rather than caching sample content.
 
@@ -43,13 +43,21 @@ npm test
 npm run lint
 npm run typecheck
 npm run build
-npm run start
+npm run preview
 npm audit --omit=dev
 ```
 
-Regression tests cover blog pagination, nested content, failure behavior, safe JSON-LD and RSS serialization, list markup, URL handling, and reading time. Deploy to a host supporting Next.js server rendering and route handlers, such as Vercel, with the same environment variables. The Notion blog, RSS handler, and generated social images require a Next.js runtime; the app is not configured for static export.
+Regression tests cover blog pagination, nested content, failure behavior, safe JSON-LD and RSS serialization, list markup, URL handling, and reading time.
 
 The homepage has two views that share one data source. **Map** (default) is an interactive SVG transit map, with technologies as lines, roles as stations, projects as branch stops and side projects on their own line. It supports pan, pinch zoom, inertia and keyboard navigation, and respects reduced motion. **List** (`?view=list`, remembered per visitor) is a scannable page with the same content. Overpass is self-hosted through `next/font`; no animation libraries are used. Without JavaScript, the List view renders.
+
+## Deployment
+
+The site is a fully static export (`output: "export"`): `next build` writes HTML, CSS, JS, the RSS feed, sitemap and social images to `out/`, and Cloudflare serves them as static assets with no server code per request (`wrangler.jsonc`, headers in `public/_headers`).
+
+`.github/workflows/deploy.yml` tests, builds and deploys on every push to `main`, daily at 09:00 UTC, and on demand. It needs four repository secrets: `NOTION_API_KEY`, `NOTION_DATABASE_ID`, `CLOUDFLARE_API_TOKEN` (an API token with the "Edit Cloudflare Workers" template) and `CLOUDFLARE_ACCOUNT_ID`. The build fails, leaving the previous deploy live, if a secret is missing or Notion is unreachable.
+
+Locally, `npm run preview` builds and serves the export with Wrangler; `npm run deploy` deploys after `npx wrangler login`.
 
 ## Customization
 

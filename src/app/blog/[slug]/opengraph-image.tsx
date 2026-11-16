@@ -1,7 +1,11 @@
 import { ImageResponse } from "next/og";
-import { getPostBySlug } from "@/lib/notion";
+import { getPostBySlug, getStaticPostParams } from "@/lib/notion";
 
-export const runtime = "nodejs";
+export const dynamic = "force-static";
+export const dynamicParams = false;
+export function generateStaticParams() {
+  return getStaticPostParams();
+}
 export const alt = "Blog Post";
 export const size = {
   width: 1200,

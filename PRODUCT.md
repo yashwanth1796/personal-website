@@ -24,7 +24,7 @@ Reviewers usually read on a laptop between other candidates, and sometimes on a 
 
 ## Capabilities and Constraints
 
-- Next.js 16 / React 19 / Tailwind 4, server-rendered; the blog is pulled from Notion and revalidates hourly.
+- Next.js 16 / React 19 / Tailwind 4, static export served by Cloudflare; the blog is pulled from Notion at build time and rebuilt daily.
 - Career data lives in `src/data/experiences.json` and `src/data/projects.json`, and the resumes share it.
 - The homepage currently works without JavaScript (native `<details>`, plain anchors). Whether to keep that is open, but it's a strong default.
 - Undecided: whether the system-font / no-font-download rule and the "yv." monogram are binding. Treat both as open.
